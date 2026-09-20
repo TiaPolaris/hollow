@@ -71,6 +71,73 @@
             perspective: 1000px;
         }
 
+        /* Mesa de cartas em leque — desktop */
+        #cards-fan-grid {
+            position: relative;
+            width: 100%;
+            max-width: 1120px;
+            height: 300px;
+            margin: 0 auto;
+            padding: 0 28px 34px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        #cards-fan-grid .card-container {
+            flex: 0 0 72px;
+            width: 72px;
+            height: 108px;
+            margin-left: -48px;
+            position: relative;
+            z-index: var(--card-z, 1);
+            transform: translateY(var(--card-lift, 0px)) rotate(var(--card-rotation, 0deg));
+            transform-origin: 50% 100%;
+            transition: transform 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+        }
+
+        #cards-fan-grid .card-container:first-child {
+            margin-left: 0;
+        }
+
+        #cards-fan-grid .card-container:hover {
+            z-index: 200 !important;
+            transform: translateY(-28px) rotate(var(--card-rotation, 0deg)) scale(1.08);
+            filter: brightness(1.15);
+        }
+
+        /* No celular: vira um carrossel horizontal compacto e fácil de tocar */
+        @media (max-width: 640px) {
+            #cards-fan-grid {
+                height: 158px;
+                max-width: none;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 10px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 14px 18px 18px;
+                scroll-snap-type: x proximity;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+
+            #cards-fan-grid .card-container,
+            #cards-fan-grid .card-container:first-child {
+                flex: 0 0 76px;
+                width: 76px;
+                height: 114px;
+                margin-left: 0;
+                transform: none;
+                scroll-snap-align: center;
+            }
+
+            #cards-fan-grid .card-container:hover {
+                transform: translateY(-8px) scale(1.04);
+            }
+        }
+
         .card-inner {
             position: relative;
             width: 100%;
@@ -409,7 +476,7 @@
             <!-- Mesa de Seleção de Cartas Viradas para Baixo -->
             <div class="w-full">
                 <p class="text-xs text-center text-slate-300 mb-3">Clique em uma carta para revelar e posicionar no oráculo:</p>
-                <div id="cards-fan-grid" class="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 gap-2 md:gap-3 max-w-4xl mx-auto p-2">
+                <div id="cards-fan-grid" aria-label="Baralho de cartas" tabindex="0">
                     <!-- Gerado dinamicamente via JS -->
                 </div>
             </div>
@@ -2007,12 +2074,23 @@
             const grid = document.getElementById('cards-fan-grid');
             grid.innerHTML = '';
 
-            // Renderiza as 78 cartas do baralho completo viradas para baixo
+            // Renderiza as 78 cartas do baralho completo em leque.
+            // No celular, o CSS transforma automaticamente o leque em carrossel horizontal.
+            const totalCartas = baralhoEmbaralhado.length;
             baralhoEmbaralhado.forEach((carta, index) => {
                 const cardEl = document.createElement('div');
-                cardEl.className = 'card-container h-28 sm:h-36 w-full cursor-pointer transform hover:-translate-y-2 transition-all';
+                cardEl.className = 'card-container cursor-pointer';
                 cardEl.id = `fan-card-${index}`;
                 cardEl.onclick = () => selecionarCarta(index);
+
+                // Distribui as cartas em um arco suave: centro mais alto, extremidades mais baixas.
+                const progresso = totalCartas > 1 ? index / (totalCartas - 1) : 0.5;
+                const centro = progresso * 2 - 1;
+                const rotacao = centro * 32;
+                const elevacao = Math.abs(centro) * 58;
+                cardEl.style.setProperty('--card-rotation', `${rotacao.toFixed(2)}deg`);
+                cardEl.style.setProperty('--card-lift', `${elevacao.toFixed(2)}px`);
+                cardEl.style.setProperty('--card-z', String(index + 1));
 
                 cardEl.innerHTML = `
                     <div class="card-inner w-full h-full rounded-xl gold-glow">
