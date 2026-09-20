@@ -16,6 +16,13 @@
     <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- ================================================================
+         FAVICON DO HOLLOW — EDITE SOMENTE A LINHA ABAIXO
+         Coloque o arquivo na mesma pasta do HTML ou use uma URL direta.
+         Exemplo: href="favicon.png" ou href="https://seusite.com/favicon.png"
+         ================================================================ -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/Px67MWq0/2c8ab63f-1576-42a1-8af2-6b12d6738d85.png>
+
     <style>
         :root {
             --bg-space: #03020c;
@@ -242,6 +249,17 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #0891b2;
+        }
+
+        /* Imagem opcional do card de WhatsApp */
+        .whatsapp-card-image {
+            background-image: var(--whatsapp-card-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .whatsapp-card-image[style*="url"] i {
+            display: none;
         }
     </style>
 </head>
