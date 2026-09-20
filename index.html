@@ -189,9 +189,45 @@
         </header>
 
         <!-- ========================================== -->
+        <!-- ETAPA 1: CONTRIBUIÇÃO VIA LIVEPIX          -->
+        <!-- ========================================== -->
+        <section id="step-payment" class="max-w-md mx-auto w-full transition-all duration-500">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-600/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl shadow-lg">
+                        <i class="fa-solid fa-sparkles text-amber-300"></i>
+                    </div>
+                    <h2 class="font-cinzel text-2xl font-bold text-amber-200">Abra o Véu</h2>
+                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">Para realizar sua tiragem, faça uma contribuição simbólica para manter o HOLLOW ativo.</p>
+                </div>
+                <div class="text-center mb-5">
+                    <div class="text-4xl font-cinzel font-bold text-amber-300 drop-shadow-[0_0_12px_rgba(245,158,11,0.35)]">R$ 5,00</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Contribuição via LivePix</p>
+                </div>
+                <div class="rounded-2xl border border-amber-500/30 bg-slate-950/70 p-4 text-center shadow-inner">
+                    <div class="w-40 h-40 mx-auto rounded-xl border border-purple-500/30 bg-slate-900 flex items-center justify-center text-slate-500 text-xs p-4">
+                        <span>QR CODE DO LIVEPIX</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-3">Substitua este espaço pelo QR Code do seu LivePix.</p>
+                </div>
+                <a id="btn-livepix" href="https://livepix.gg/tiapolaris" target="_blank" rel="noopener noreferrer" class="w-full mt-5 py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-700 via-indigo-600 to-cyan-600 hover:from-purple-600 hover:to-cyan-500 text-white font-bold tracking-wider uppercase text-sm shadow-lg shadow-purple-900/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 border border-amber-400/30">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-amber-300"></i>
+                    <span>Contribuir via LivePix</span>
+                </a>
+                <button type="button" onclick="liberarCadastro()" class="w-full mt-3 py-3 px-6 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-200 border border-purple-500/40 font-bold tracking-wider uppercase text-xs transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check text-emerald-400"></i>
+                    <span>Já realizei minha contribuição</span>
+                </button>
+                <p class="text-[10px] text-slate-500 text-center mt-4 leading-relaxed">A confirmação nesta etapa é feita pelo próprio usuário. O HOLLOW não verifica automaticamente o pagamento.</p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
         <!-- ETAPA 1: FORMULÁRIO DE CADASTRO (+18)     -->
         <!-- ========================================== -->
-        <section id="step-register" class="max-w-md mx-auto w-full transition-all duration-500">
+        <section id="step-register" class="hidden max-w-md mx-auto w-full transition-all duration-500">
             <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
                 <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
@@ -1866,6 +1902,12 @@
         /* ==========================================================================
            LÓGICA DA ETAPA 1: VALIDAR IDADE (+18)
            ========================================================================== */
+        function liberarCadastro() {
+            document.getElementById('step-payment').classList.add('hidden');
+            document.getElementById('step-register').classList.remove('hidden');
+            document.getElementById('step-register').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function processarCadastro(event) {
             event.preventDefault();
             
@@ -2110,31 +2152,27 @@
         }
 
         function reiniciarTiragem() {
-            // Volta completamente ao início do ritual, exigindo novo cadastro.
+            // Volta completamente ao início do ritual, exigindo nova contribuição e novo cadastro.
             document.getElementById('step-report').classList.add('hidden');
             document.getElementById('step-report').classList.remove('flex');
             document.getElementById('step-picking').classList.add('hidden');
             document.getElementById('step-picking').classList.remove('flex');
             document.getElementById('step-shuffle').classList.add('hidden');
             document.getElementById('step-shuffle').classList.remove('flex');
-            document.getElementById('step-register').classList.remove('hidden');
+            document.getElementById('step-register').classList.add('hidden');
+            document.getElementById('step-payment').classList.remove('hidden');
 
-            // Limpa os dados da pessoa e da tiragem anterior.
             usuarioData = { nome: '', sobrenome: '', dataNascimento: '' };
             cartasSelecionadas = [];
             posicaoAtualIndex = 1;
             baralhoEmbaralhado = [];
 
-            // Limpa o formulário.
             document.getElementById('form-cadastro').reset();
             document.getElementById('erro-idade').classList.add('hidden');
-
-            // Reseta o embaralhamento para a próxima entrada.
             document.getElementById('btn-embaralhar').disabled = false;
             document.getElementById('btn-embaralhar').classList.remove('opacity-50', 'cursor-not-allowed');
             document.getElementById('shuffle-status').innerText = "Aguardando início do ritual...";
 
-            // Reseta os seis slots visuais.
             for (let i = 1; i <= 6; i++) {
                 const slot = document.getElementById(`slot-${i}`);
                 slot.className = 'glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all';
