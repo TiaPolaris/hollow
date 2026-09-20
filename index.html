@@ -2247,7 +2247,7 @@
                 container.appendChild(cardCard);
             });
 
-            // Resumo prático das 6 cartas
+            // Resumo final: curto, direto e sem citar os nomes das cartas.
             const momento = cartasSelecionadas[0].carta;
             const desafio = cartasSelecionadas[1].carta;
             const passado = cartasSelecionadas[2].carta;
@@ -2255,27 +2255,24 @@
             const conselho = cartasSelecionadas[4].carta;
             const desfecho = cartasSelecionadas[5].carta;
 
+            const temas = (carta, limite = 3) => {
+                return carta.palavrasChave
+                    .slice(0, limite)
+                    .map(p => p.toLowerCase())
+                    .join(', ');
+            };
+
             const resumoPratico = `
-                <div class="space-y-4 text-left">
-                    <div>
-                        <strong class="text-amber-300">O que a leitura mostra:</strong>
-                        <span> Você está vivendo um momento ligado a <strong>${momento.nome}</strong>. O que aconteceu antes, representado por <strong>${passado.nome}</strong>, ajuda a explicar por que essa situação chegou até aqui.</span>
-                    </div>
-                    <div>
-                        <strong class="text-amber-300">O ponto de atenção:</strong>
-                        <span> O maior desafio agora aparece em <strong>${desafio.nome}</strong>. Na prática, é uma área que pede mais cuidado, calma e escolhas conscientes.</span>
-                    </div>
-                    <div>
-                        <strong class="text-amber-300">O que fazer:</strong>
-                        <span> O conselho de <strong>${conselho.nome}</strong> é o caminho mais útil dentro desta leitura. Evite agir apenas no impulso e dê atenção ao que realmente está sob seu controle.</span>
-                    </div>
-                    <div>
-                        <strong class="text-amber-300">Daqui para frente:</strong>
-                        <span> <strong>${futuro.nome}</strong> mostra a tendência do próximo período, enquanto <strong>${desfecho.nome}</strong> aponta para onde a situação pode caminhar se as escolhas indicadas pela leitura forem colocadas em prática.</span>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 text-slate-200">
-                        <strong class="text-amber-200">Em poucas palavras:</strong> olhe para o que está acontecendo agora, enfrente o principal desafio sem fugir dele e concentre sua energia no que você pode mudar. A leitura serve como orientação, não como uma sentença sobre o seu futuro.
-                    </div>
+                <div class="text-left max-w-3xl mx-auto">
+                    <p class="text-sm md:text-base text-slate-200 leading-relaxed font-light">
+                        A leitura mostra um momento que pede <strong class="text-amber-200">${temas(momento)}</strong>. Algo que vem do passado, ligado a <strong class="text-amber-200">${temas(passado, 2)}</strong>, ainda influencia a situação atual.
+                        O principal cuidado é não deixar <strong class="text-amber-200">${temas(desafio)}</strong> atrapalhar suas decisões.
+                        O melhor caminho agora é agir com <strong class="text-amber-200">${temas(conselho)}</strong>, prestando atenção às oportunidades e mudanças que podem surgir em <strong class="text-amber-200">${temas(futuro, 2)}</strong>.
+                        Se você mantiver esse direcionamento, a tendência é caminhar para <strong class="text-amber-200">${temas(desfecho)}</strong>.
+                    </p>
+                    <p class="mt-4 pt-4 border-t border-slate-800 text-sm md:text-base text-slate-100 leading-relaxed">
+                        <strong class="text-amber-300">Em poucas palavras:</strong> entenda o que está acontecendo, não fuja do que precisa ser enfrentado e concentre sua energia no que realmente está sob seu controle.
+                    </p>
                 </div>
             `;
 
