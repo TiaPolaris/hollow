@@ -1,1 +1,1070 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo de Tarô Celestial | Leitura Online</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fontes Google (Cinzel para títulos místicos e Plus Jakarta Sans para leitura) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <style>
+        /* Estilos globais e fontes */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Fundo de estrelas animado via Canvas */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Efeito Glassmorphism esotérico */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-card {
+            background: rgba(30, 27, 75, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        /* Estrutura 3D para as cartas */
+        .card-container {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .card-front {
+            transform: rotateY(180deg);
+        }
+
+        /* Brilhos dourados em hover */
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .gold-glow:hover {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);
+            transform: translateY(-4px);
+        }
+
+        /* Animações de Embaralhamento */
+        @keyframes shuffleLeft {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(-120px) rotate(-15deg) scale(1.05); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        @keyframes shuffleRight {
+            0% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(120px) rotate(15deg) scale(1.05); }
+            100% { transform: translateX(0) rotate(0deg); }
+        }
+
+        @keyframes shuffleCenter {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .anim-shuffle-left { animation: shuffleLeft 0.6s ease-in-out infinite; }
+        .anim-shuffle-right { animation: shuffleRight 0.6s ease-in-out infinite; }
+        .anim-shuffle-center { animation: shuffleCenter 0.6s ease-in-out infinite; }
+
+        /* Barra de rolagem personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b45309;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d97706;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-slate-100 flex flex-col justify-between">
+
+    <canvas idstarfield id="starfield"></canvas>
+
+    <!-- Conteúdo Principal -->
+    <div class="relative z-10 container mx-auto px-4 py-8 max-w-6xl flex-grow flex flex-col justify-center">
+
+        <header class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase mb-3">
+                <i class="fa-solid font-star fa-moon"></i> Oráculo Místico dos Arcanos
+            </div>
+            <h1 class="font-cinzel text-4xl md:text-6xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-sm">
+                TARÔ CELESTIAL
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base max-w-lg mx-auto mt-2">
+                Revele as diretrizes do seu destino através do alinhamento dos Arcanos Maiores.
+            </p>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- ETAPA 1: FORMULÁRIO DE CADASTRO (+18)     -->
+        <!-- ========================================== -->
+        <section id="step-register" class="max-w-md mx-auto w-full transition-all duration-500">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden border border-amber-500/30">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-xl">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+                    <h2 class="font-cinzel text-2xl font-bold text-amber-200">Identificação Sagrada</h2>
+                    <p class="text-xs text-slate-400 mt-1">É necessário ser maior de 18 anos para acessar a mesa de leitura.</p>
+                </div>
+
+                <form id="form-cadastro" class="space-y-4" onsubmit="processarCadastro(event)">
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Nome</label>
+                        <input type="text" id="nome" required placeholder="Seu primeiro nome" 
+                            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Sobrenome</label>
+                        <input type="text" id="sobrenome" required placeholder="Seu sobrenome completo" 
+                            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Data de Nascimento</label>
+                        <input type="date" id="data-nascimento" required 
+                            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm">
+                    </div>
+
+                    <div id="erro-idade" class="hidden p-3 rounded-lg bg-red-950/80 border border-red-500/50 text-red-200 text-xs text-center flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-red-400 text-base"></i>
+                        <span>Acesso permitido apenas para maiores de 18 anos completos.</span>
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-950 font-bold tracking-wider uppercase text-sm shadow-lg shadow-amber-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 mt-2">
+                        <span>Iniciar Jornada</span>
+                        <i class="fa-solid fa-sparkles"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA 2: MESA DE EMBARALHAMENTO           -->
+        <!-- ========================================== -->
+        <section id="step-shuffle" class="hidden flex-col items-center justify-center text-center transition-all duration-500">
+            <div class="glass-panel p-8 rounded-3xl max-w-2xl w-full border border-amber-500/30 flex flex-col items-center">
+                <p id="saudacao-usuario" class="font-cinzel text-xl text-amber-300 mb-2">Bem-vindo(a)</p>
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">Sintonize sua energia com o Baralho</h2>
+                <p class="text-sm text-slate-300 max-w-md mb-8">
+                    Respire profundamente, concentre-se nas perguntas do seu coração e clique no botão para embaralhar os Arcanos.
+                </p>
+
+                <!-- Baralho em Pilha Animada -->
+                <div class="relative w-40 h-64 my-6 flex items-center justify-center">
+                    <div id="deck-card-1" class="absolute w-36 h-56 rounded-xl border-2 border-amber-500/40 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 shadow-xl flex items-center justify-center overflow-hidden">
+                        <div class="w-full h-full border border-amber-400/20 m-1 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-compass-drafting text-4xl text-amber-500/30"></i>
+                        </div>
+                    </div>
+                    <div id="deck-card-2" class="absolute w-36 h-56 rounded-xl border-2 border-amber-500/50 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 shadow-xl flex items-center justify-center overflow-hidden">
+                        <div class="w-full h-full border border-amber-400/20 m-1 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-eye text-4xl text-amber-500/30"></i>
+                        </div>
+                    </div>
+                    <div id="deck-card-3" class="absolute w-36 h-56 rounded-xl border-2 border-amber-400 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 shadow-2xl flex items-center justify-center overflow-hidden gold-glow">
+                        <!-- Padrão do Verso da Carta -->
+                        <div class="w-full h-full border-2 border-amber-400/40 p-2 rounded-lg flex flex-col items-center justify-between bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/40 via-slate-900 to-indigo-950">
+                            <div class="flex justify-between w-full text-amber-400/60 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <div class="w-16 h-16 rounded-full border border-amber-400/50 flex items-center justify-center text-amber-300 text-2xl bg-amber-500/10">
+                                <i class="fa-solid fa-sun"></i>
+                            </div>
+                            <div class="flex justify-between w-full text-amber-400/60 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="shuffle-status" class="h-6 text-xs text-amber-300 font-semibold my-2 tracking-wide uppercase">
+                    Aguardando início do ritual...
+                </div>
+
+                <button id="btn-embaralhar" onclick="executarEmbaralhar()" 
+                    class="py-3.5 px-8 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-950 font-bold tracking-wider uppercase text-sm shadow-lg shadow-amber-600/30 transition-all transform hover:scale-105 flex items-center gap-2 mt-2">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Embaralhar Cartas</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA 3: TIRAGEM DE 6 CARTAS PASSO A PASSO -->
+        <!-- ========================================== -->
+        <section id="step-picking" class="hidden flex-col items-center transition-all duration-500">
+            <!-- Slots das 6 Posicoes -->
+            <div class="w-full mb-6">
+                <div class="text-center mb-4">
+                    <span id="picking-indicator" class="px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold tracking-wider uppercase">
+                        Escolha a Carta 1 de 6
+                    </span>
+                    <h3 id="position-title" class="font-cinzel text-xl md:text-2xl font-bold text-amber-300 mt-2">
+                        1. Momento Atual (Energia Presente)
+                    </h3>
+                </div>
+
+                <!-- Painel dos 6 Slots -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <!-- Slot 1 -->
+                    <div id="slot-1" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">1. Momento</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                    <!-- Slot 2 -->
+                    <div id="slot-2" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">2. Desafio</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                    <!-- Slot 3 -->
+                    <div id="slot-3" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">3. Passado</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                    <!-- Slot 4 -->
+                    <div id="slot-4" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">4. Futuro</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                    <!-- Slot 5 -->
+                    <div id="slot-5" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">5. Conselho</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                    <!-- Slot 6 -->
+                    <div id="slot-6" class="glass-card rounded-xl p-2 text-center border border-amber-500/20 flex flex-col items-center justify-between min-h-[160px] transition-all">
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-tight">6. Desfecho</span>
+                        <div class="slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </div>
+                        <span class="text-[11px] text-slate-400 truncate w-full font-semibold slot-card-name">Aguardando</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Ação Apos Tiragem Completa -->
+            <div id="reading-ready-container" class="hidden mb-6 animate-bounce">
+                <button onclick="gerarRelatorioFinal()" 
+                    class="py-4 px-10 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-slate-950 font-black tracking-widest uppercase text-base shadow-2xl shadow-amber-500/50 hover:scale-105 transition-all flex items-center gap-3">
+                    <i class="fa-solid fa-eye text-xl"></i>
+                    <span>Ver Leitura Completa</span>
+                </button>
+            </div>
+
+            <!-- Mesa de Seleção de Cartas Viradas para Baixo -->
+            <div class="w-full">
+                <p class="text-xs text-center text-slate-400 mb-3">Clique em uma carta para revelar e posicionar no oráculo:</p>
+                <div id="cards-fan-grid" class="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 gap-2 md:gap-3 max-w-4xl mx-auto p-2">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA 4: RELATÓRIO DA LEITURA COMPLETA    -->
+        <!-- ========================================== -->
+        <section id="step-report" class="hidden flex-col items-center transition-all duration-500">
+            <!-- Header do Relatorio -->
+            <div class="glass-panel p-6 md:p-8 rounded-3xl w-full mb-8 border border-amber-500/40 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Revelação do Oráculo</span>
+                <h2 id="report-user-title" class="font-cinzel text-3xl md:text-5xl font-bold text-amber-200 mt-1 mb-2">
+                    Leitura Celestial de [Nome]
+                </h2>
+                <p id="report-date" class="text-xs text-slate-400">Realizada em --/--/----</p>
+                
+                <div class="mt-4 inline-block p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 max-w-2xl">
+                    <i class="fa-solid fa-quote-left mr-1 opacity-60"></i>
+                    As cartas refletem o panorama vibracional do seu momento presente. Absorva os conselhos com sabedoria para guiar seu livre-arbítrio.
+                </div>
+            </div>
+
+            <!-- Grade das 6 Cartas Detalhadas -->
+            <div id="report-cards-container" class="space-y-6 w-full">
+                <!-- Inserido dinamicamente pelo JS -->
+            </div>
+
+            <!-- Síntese e Conselho Final -->
+            <div class="glass-panel p-6 md:p-8 rounded-3xl w-full mt-8 border border-amber-500/40 text-center">
+                <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-xl">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h3 class="font-cinzel text-2xl font-bold text-amber-300 mb-3">Síntese Holística da Tiragem</h3>
+                <p id="report-synthesis" class="text-sm md:text-base text-slate-300 leading-relaxed max-w-3xl mx-auto">
+                    Aguardando geração do panorama...
+                </p>
+
+                <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="reiniciarTiragem()" 
+                        class="py-3 px-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Realizar Nova Tiragem</span>
+                    </button>
+                    <button onclick="window.print()" 
+                        class="py-3 px-8 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-amber-600/20">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Salvar / Imprimir Leitura</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="relative z-10 text-center py-6 text-xs text-slate-500 border-t border-slate-900/80 mt-12">
+        <p>© Tarô Celestial Online • Para fins de entretenimento e autoconhecimento • Maioridade +18</p>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           BANCO DE DADOS DOS ARCANOS MAIORES COM SVGs E INTERPRETAÇÕES
+           ========================================================================== */
+        const ARCANOS_MAIORES = [
+            {
+                id: 0,
+                numero: "0",
+                nome: "O Louco",
+                palavrasChave: ["Novos Inícios", "Espontaneidade", "Fé no Desconhecido", "Liberdade"],
+                icone: "fa-person-walking-luggage",
+                cor: "from-amber-400 to-yellow-600",
+                significados: {
+                    1: "Momento de dar um salto de fé e iniciar um novo ciclo sem medo do desconhecido.",
+                    2: "O desafio é evitar a imprudência excessiva e agir com um mínimo de planejamento.",
+                    3: "Decisões espontâneas no passado abriram caminhos inesperados em sua vida.",
+                    4: "Uma nova oportunidade inesperada se apresentará em breve, exigindo coragem.",
+                    5: "Confie na sua intuição e não tenha medo de recomeçar do zero se necessário.",
+                    6: "Um estado de renovação completa e liberdade espiritual será alcançado."
+                },
+                conselho: "Abrace a ingenuidade sagrada. Dê o primeiro passo mesmo sem ver a escada toda."
+            },
+            {
+                id: 1,
+                numero: "I",
+                nome: "O Mago",
+                palavrasChave: ["Manifestação", "Poder Pessoal", "Habilidade", "Recursos"],
+                icone: "fa-wand-magic-sparkles",
+                cor: "from-purple-500 to-indigo-700",
+                significados: {
+                    1: "Você possui todas as ferramentas necessárias para transformar sua realidade agora.",
+                    2: "O obstáculo reside na dispersão de foco ou na falta de confiança no seu potencial.",
+                    3: "Suas habilidades e ações conscientes passadas construíram a base do momento atual.",
+                    4: "Período propício para iniciar projetos e materializar ideias no mundo físico.",
+                    5: "Canalize sua energia com intenção clara e utilize seus talentos com maestria.",
+                    6: "Sucesso na concretização dos seus objetivos através da sua determinação."
+                },
+                conselho: "Como em cima, é embaixo. Concentre sua vontade e tome a iniciativa."
+            },
+            {
+                id: 2,
+                numero: "II",
+                nome: "A Sacerdotisa",
+                palavrasChave: ["Intuição", "Mistério", "Sabedoria Interior", "Paciência"],
+                icone: "fa-moon",
+                cor: "from-blue-600 to-slate-900",
+                significados: {
+                    1: "Fase de forte conexão intuitiva e necessidade de recolhimento contemplativo.",
+                    2: "Segredos não revelados ou a negação de ouvir sua voz interior geram dúvidas.",
+                    3: "Um período de silêncio ou aprendizado oculto moldou sua maturidade recente.",
+                    4: "A verdade se revelará no tempo certo; não tente forçar respostas agora.",
+                    5: "Silencie o ruído externo e confie plenamente no que seus sentimentos dizem.",
+                    6: "Compreensão profunda dos mistérios e clareza espiritual revelada."
+                },
+                conselho: "Nem tudo precisa ser dito ou feito imediatamente. O saber silencioso é seu escudo."
+            },
+            {
+                id: 3,
+                numero: "III",
+                nome: "A Imperatriz",
+                palavrasChave: ["Abundância", "Fertilidade", "Criatividade", "Nutrição"],
+                icone: "fa-crown",
+                cor: "from-emerald-500 to-teal-800",
+                significados: {
+                    1: "Energia de grande prosperidade, criatividade fluindo e harmonia nas relações.",
+                    2: "Perigo de apego excessivo, estagnação pelo conforto ou carência afetiva.",
+                    3: "Sementes de cuidado e dedicação plantadas no passado estão florescendo.",
+                    4: "Fase de crescimento material, nascimento de ideias ou realizações prazerosas.",
+                    5: "Nutra seus projetos e relacionamentos com amor, afeto e paciência.",
+                    6: "Colheita farta, bem-estar pleno e expansão em todas as áreas."
+                },
+                conselho: "Permita-se receber a beleza do universo. Cultive a abundância que já existe em você."
+            },
+            {
+                id: 4,
+                numero: "IV",
+                nome: "O Imperador",
+                palavrasChave: ["Estrutura", "Autoridade", "Estabilidade", "Liderança"],
+                icone: "fa-chess-king",
+                cor: "from-red-600 to-amber-800",
+                significados: {
+                    1: "Necessidade de impor ordem, criar estruturas sólidas e assumir o controle.",
+                    2: "Rigidez inflexível ou conflitos com figuras de autoridade e regras impostas.",
+                    3: "A disciplina aplicada anteriormente trouxe a estabilidade de que desfruta hoje.",
+                    4: "Consolidação de posição de liderança ou estruturação formal de negócios.",
+                    5: "Defina limites claros, organize seus métodos e aja com pragmatismo.",
+                    6: "Domínio completo da situação com ordem, segurança e base inabalável."
+                },
+                conselho: "Seja o arquiteto do seu próprio reino. Disciplina é a ponte para a liberdade."
+            },
+            {
+                id: 5,
+                numero: "VI",
+                nome: "Os Enamorados",
+                palavrasChave: ["Escolha", "União", "Valores", "Alinhamento"],
+                icone: "fa-heart font-star",
+                cor: "from-rose-500 to-pink-700",
+                significados: {
+                    1: "Você se encontra diante de uma encruzilhada importante que exige decisão consciente.",
+                    2: "Dilema moral, dúvida entre razão e emoção ou conflitos em parcerias.",
+                    3: "Uma escolha afetiva ou de valores feita recentemente definiu este cenário.",
+                    4: "Parcerias profundas ou definição clara do caminho a seguir no amor/trabalho.",
+                    5: "Escolha aquilo que ressoa verdadeiramente com a essência da sua alma.",
+                    6: "Harmonia encontrada através da fidelidade aos seus valores mais puros."
+                },
+                conselho: "Suas escolhas moldam seu destino. Decida com base no amor e não no medo."
+            },
+            {
+                id: 6,
+                numero: "VII",
+                nome: "O Carro",
+                palavrasChave: ["Foco", "Determinação", "Vitória", "Autocontrol"],
+                icone: "fa-shield-halved",
+                cor: "from-cyan-500 to-blue-800",
+                significados: {
+                    1: "Momento de grande impulso para frente, superação de obstáculos e triunfo.",
+                    2: "Forças opostas puxando em direções diferentes; perigo de perder a direção.",
+                    3: "Seu esforço focado superou adversidades recentes, gerando momentum.",
+                    4: "Aceleração rápida rumo às suas metas e conquistas acumuladas.",
+                    5: "Mantenha as rédeas firmes da sua vida. Não permita que distrações o desviem.",
+                    6: "Vitória decisiva garantida pelo uso da sua força de vontade inflexível."
+                },
+                conselho: "Direcione suas energias conflitantes para um único objetivo. A vitória é sua."
+            },
+            {
+                id: 7,
+                numero: "VIII",
+                nome: "A Força",
+                palavrasChave: ["Coragem", "Compaixão", "Domínio Domado", "Paciência"],
+                icone: "fa-infinity",
+                cor: "from-amber-500 to-orange-700",
+                significados: {
+                    1: "Você possui a resiliência e mansidão necessárias para domar grandes feras internas.",
+                    2: "Insegurança, impulsividade descontrolada ou raiva reprimida sufocando a paz.",
+                    3: "Um teste de paciência no passado provou e fortaleceu seu espírito.",
+                    4: "Superação graciosa de desafios difíceis através da diplomacia e firmeza.",
+                    5: "Conquiste os problemas com amor, compreensão e autocontrole, não com força bruta.",
+                    6: "Triunfo do espírito sobre a matéria com equilíbrio e dignidade inabalável."
+                },
+                conselho: "A verdadeira força não ruge; ela domina com a suavidade de quem sabe quem é."
+            },
+            {
+                id: 8,
+                numero: "IX",
+                nome: "O Eremita",
+                palavrasChave: ["Introspecção", "Busca da Verdade", "Guia", "Solitude"],
+                icone: "fa-lantern",
+                cor: "from-slate-500 to-slate-800",
+                significados: {
+                    1: "Momento propício para olhar para dentro, buscar sabedoria e se afastar do barulho.",
+                    2: "Isolamento excessivo, solidão amarga ou recusa em aceitar conselhos sábios.",
+                    3: "Um período de estudo e reflexão interior trouxe lições valiosas recentemente.",
+                    4: "Encontro com um mentor ou alcance de um novo patamar de autoconhecimento.",
+                    5: "Ilumine seu próprio caminho antes de tentar guiar os outros. Dê tempo ao tempo.",
+                    6: "Iluminação interior e clareza absoluta sobre o seu propósito de vida."
+                },
+                conselho: "A lanterna que você carrega ilumina apenas um passo de cada vez. Caminhe com calma."
+            },
+            {
+                id: 9,
+                numero: "X",
+                nome: "A Roda da Fortuna",
+                palavrasChave: ["Ciclos", "Mudança", "Destino", "Virada"],
+                icone: "fa-arrows-spin",
+                cor: "from-yellow-400 to-amber-700",
+                significados: {
+                    1: "Mudanças inevitáveis estão em curso; o ciclo está girando a seu favor.",
+                    2: "Resistência às transformações naturais da vida gerando ansiedade.",
+                    3: "Uma reviravolta inesperada alterou drasticamente seus planos passados.",
+                    4: "Sorte, novas oportunidades e mudança benéfica de maré em breve.",
+                    5: "Adapte-se aos altos e baixos com equanimidade. Tudo passa e se renova.",
+                    6: "Evolução espiritual e alcance de uma nova fase abençoada no ciclo vital."
+                },
+                conselho: "A única constante no universo é a mudança. Flua com a Roda."
+            },
+            {
+                id: 10,
+                numero: "XI",
+                nome: "A Justiça",
+                palavrasChave: ["Verdade", "Equilíbrio", "Causa e Efeito", "Clareza"],
+                icone: "fa-scale-balanced",
+                cor: "from-indigo-400 to-purple-800",
+                significados: {
+                    1: "Exigência de imparcialidade, honestidade e acerto de contas ético no presente.",
+                    2: "Injustiças percebidas, autocrítica severa ou fugir das consequências de atos.",
+                    3: "Decisões passadas estão trazendo os resultados justos e merecidos no momento.",
+                    4: "Resolução legal ou moral satisfatória com restauração do equilíbrio.",
+                    5: "Pondere todos os lados com frieza e aja com transparência e integridade.",
+                    6: "Harmonia restabelecida e justiça divina prevalecendo em seus caminhos."
+                },
+                conselho: "Colhemos exatamente o que semeamos. Aja de modo que sua consciência durma em paz."
+            },
+            {
+                id: 11,
+                numero: "XIII",
+                nome: "A Morte",
+                palavrasChave: ["Transformação", "Fim de Ciclo", "Renascimento", "Desapego"],
+                icone: "fa-skull",
+                cor: "from-slate-900 to-black",
+                significados: {
+                    1: "Encerramento necessário de uma fase velha para dar lugar ao novo em sua vida.",
+                    2: "Apego doloroso ao passado e resistência em deixar ir o que já faleceu.",
+                    3: "Umas perdas ou rupturas recentes limparam o terreno para o seu crescimento.",
+                    4: "Renascimento profundo e surgimento de uma versão mais forte de você.",
+                    5: "Desapegue-se sem mágoas. Aceite o fim como a porta de entrada para o recomeço.",
+                    6: "Transformação radical e libertadora do seu ser e das suas circunstâncias."
+                },
+                conselho: "A lagarta precisa aceitar seu fim para que a borboleta possa nascer."
+            },
+            {
+                id: 12,
+                numero: "XIV",
+                nome: "A Temperança",
+                palavrasChave: ["Alquimia", "Equilíbrio", "Paciência", "Moderação"],
+                icone: "fa-glass-water",
+                cor: "from-blue-400 to-teal-600",
+                significados: {
+                    1: "Convite para a moderação, cura emocional e conciliação de opostos.",
+                    2: "Extremismos, impaciência ou falta de harmonia desgastando sua energia.",
+                    3: "Um processo gradual de cura trouxe tranquilidade para sua jornada recente.",
+                    4: "Paz de espírito reestabelecida e integração harmoniosa de diferentes áreas.",
+                    5: "Combine os ingredientes da sua vida com calma e sabedoria. Nada de pressa.",
+                    6: "Estado elevado de serenidade, bem-estar e cura espiritual duradoura."
+                },
+                conselho: "O milagre da transformação acontece no gotejar paciente do tempo."
+            },
+            {
+                id: 13,
+                numero: "XVII",
+                nome: "A Estrela",
+                palavrasChave: ["Esperança", "Inspiração", "Fé", "Renovação"],
+                icone: "fa-star font-star",
+                cor: "from-sky-400 to-indigo-600",
+                significados: {
+                    1: "Momento de bênção, clareza, renovação da fé e inspiração divina.",
+                    2: "Desânimo temporário, pessimismo ou cegueira para as luzes ao seu redor.",
+                    3: "Superação de uma tempestade passada trouxe uma visão límpida do futuro.",
+                    4: "Caminhos abertos iluminados por boas oportunidades e cura profunda.",
+                    5: "Mantenha a fé inabalável e compartilhe sua luz autêntica com o mundo.",
+                    6: "Realização dos desejos mais puros da sua alma com proteção celestial."
+                },
+                conselho: "Mesmo na noite mais escura, as estrelas continuam a guiar os navegantes."
+            },
+            {
+                id: 14,
+                numero: "XVIII",
+                nome: "A Lua",
+                palavrasChave: ["Ilusão", "Inconsciente", "Intuição", "Enfrentar Sombras"],
+                icone: "fa-moon",
+                cor: "from-violet-700 to-slate-950",
+                significados: {
+                    1: "Enfrentamento de medos profundos, ilusões ou incertezas nebulosas.",
+                    2: "Autoengano, paranoia ou permitir que fantasias assustadoras paralisem seus passos.",
+                    3: "Sombras do passado ainda refletem dúvidas no seu presente; hora de limpar.",
+                    4: "Revelação de verdades ocultas e dissipação gradual do nevoeiro.",
+                    5: "Confie nos seus sonhos e símbolos, mas valide os fatos antes de julgar.",
+                    6: "Superação das ilusões com iluminação e resgate do seu poder oculto."
+                },
+                conselho: "Não teme a escuridão; é nela que a intuição brilha com mais força."
+            },
+            {
+                id: 15,
+                numero: "XIX",
+                nome: "O Sol",
+                palavrasChave: ["Alegria", "Vitalidade", "Sucesso", "Clareza"],
+                icone: "fa-sun",
+                cor: "from-amber-400 to-yellow-500",
+                significados: {
+                    1: "Abundância de energia positiva, clareza mental, sucesso e celebração.",
+                    2: "Orgulho excessivo ou dificuldade temporária em enxergar a própria luz.",
+                    3: "Momentos felizes e de conquista no passado continuam a aquecer seu caminho.",
+                    4: "Período de grande visibilidade, prosperidade e felicidade plena em breve.",
+                    5: "Seja transparente, irradiando calor, entusiasmo e simplicidade por onde passar.",
+                    6: "Triunfo radiante, saúde vibrante e plenitude em todos os sentidos."
+                },
+                conselho: "A luz do Sol dissipa todas as sombras. Deixe seu brilho esquentar o mundo."
+            },
+            {
+                id: 16,
+                numero: "XX",
+                nome: "O Julgamento",
+                palavrasChave: ["Chamado", "Redenção", "Despertar", "Novo Nível"],
+                icone: "fa-bullhorn",
+                cor: "from-amber-300 to-purple-600",
+                significados: {
+                    1: "Momento de grande despertar de consciência e resposta a um chamado superior.",
+                    2: "Remorso paralisa, autojulgamento severo ou recusa em evoluir de fase.",
+                    3: "Uma grande tomada de consciência no passado libertou você de velhos padrões.",
+                    4: "Ressurreição de oportunidades passadas com um novo olhar elevado.",
+                    5: "Perdoe a si mesmo e aos outros. Erga-se com coragem para a sua nova vida.",
+                    6: "Redenção completa e transição bem-sucedida para um nível superior da existência."
+                },
+                conselho: "O trompete da sua alma está tocando. É hora de despertar para quem você nasceu para ser."
+            },
+            {
+                id: 17,
+                numero: "XXI",
+                nome: "O Mundo",
+                palavrasChave: ["Plenitude", "Conclusão", "Integração", "Sucesso Absoluto"],
+                icone: "fa-globe",
+                cor: "from-emerald-400 to-indigo-700",
+                significados: {
+                    1: "Sensação de dever cumprido, harmonia total e integração com o universo.",
+                    2: "Falta de fechamento formal de ciclos que impede a celebração da vitória.",
+                    3: "A conclusão bem-sucedida de etapas anteriores trouxe grande sabedoria.",
+                    4: "Realização máxima, viagens, expansão de horizontes e triunfo global.",
+                    5: "Celebre suas conquistas e prepare-se para entrar em uma espiral superior.",
+                    6: "Sucesso completo e absoluto. O universo inteiro sorri para a sua jornada."
+                },
+                conselho: "Você percorreu toda a jornada. Sinta a plenitude de ser uno com a criação."
+            }
+        ];
+
+        /* ==========================================================================
+           ESTADO DA APLICAÇÃO E VARIÁVEIS GLOBAIS
+           ========================================================================== */
+        let usuario = {
+            nome: "",
+            sobrenome: "",
+            dataNascimento: "",
+            idade: 0
+        };
+
+        let baralhoAtual = [];
+        let cartasSelecionadas = [];
+        const POSICOES_TIRAGEM = [
+            { id: 1, nome: "Momento Atual", desc: "Energia Presente" },
+            { id: 2, nome: "O Desafio", desc: "Obstáculo Secreto" },
+            { id: 3, nome: "Passado Recente", desc: "Influência Recente" },
+            { id: 4, nome: "Futuro Próximo", desc: "Tendência a Curto Prazo" },
+            { id: 5, nome: "O Conselho", desc: "Direcionamento do Oráculo" },
+            { id: 6, nome: "Desfecho", desc: "Resultado Provável" }
+        ];
+
+        /* ==========================================================================
+           ETAPA 1: VALIDAÇÃO DE CADASTRO (+18)
+           ========================================================================== */
+        function processarCadastro(e) {
+            e.preventDefault();
+            const nome = document.getElementById("nome").value.trim();
+            const sobrenome = document.getElementById("sobrenome").value.trim();
+            const dataNasc = document.getElementById("data-nascimento").value;
+            const erroContainer = document.getElementById("erro-idade");
+
+            if (!nome || !sobrenome || !dataNasc) return;
+
+            // Calcular Idade
+            const hoje = new Date();
+            const nascimento = new Date(dataNasc);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+
+            if (idade < 18) {
+                erroContainer.classList.remove("hidden");
+                return;
+            } else {
+                erroContainer.classList.add("hidden");
+            }
+
+            // Salvar no Estado
+            usuario = { nome, sobrenome, dataNascimento: dataNasc, idade };
+
+            // Transição para Etapa 2
+            document.getElementById("step-register").classList.add("hidden");
+            
+            const stepShuffle = document.getElementById("step-shuffle");
+            stepShuffle.classList.remove("hidden");
+            stepShuffle.classList.add("flex");
+
+            document.getElementById("saudacao-usuario").innerText = `Bem-vindo(a), ${usuario.nome}!`;
+        }
+
+        /* ==========================================================================
+           ETAPA 2: ANIMAÇÃO DE EMBARALHAMENTO 3D
+           ========================================================================== */
+        function executarEmbaralhar() {
+            const btn = document.getElementById("btn-embaralhar");
+            const status = document.getElementById("shuffle-status");
+            const c1 = document.getElementById("deck-card-1");
+            const c2 = document.getElementById("deck-card-2");
+            const c3 = document.getElementById("deck-card-3");
+
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            // Ativar Animações CSS
+            c1.classList.add("anim-shuffle-left");
+            c2.classList.add("anim-shuffle-right");
+            c3.classList.add("anim-shuffle-center");
+
+            status.innerText = "Energizando as cartas com sua intenção...";
+
+            setTimeout(() => {
+                status.innerText = "Sintonizando os arcanos com seu campo vibracional...";
+            }, 1200);
+
+            setTimeout(() => {
+                // Parar Animações
+                c1.classList.remove("anim-shuffle-left");
+                c2.classList.remove("anim-shuffle-right");
+                c3.classList.remove("anim-shuffle-center");
+
+                status.innerText = "Embaralhamento concluído com sucesso!";
+
+                // Transição para Etapa 3 após 800ms
+                setTimeout(() => {
+                    iniciarMesaTiragem();
+                }, 800);
+            }, 2500);
+        }
+
+        /* ==========================================================================
+           ETAPA 3: TIRAGEM DAS CARTAS PASSO A PASSO
+           ========================================================================== */
+        function iniciarMesaTiragem() {
+            // Embaralhar array real dos arcanos
+            baralhoAtual = [...ARCANOS_MAIORES].sort(() => Math.random() - 0.5);
+            cartasSelecionadas = [];
+
+            // Ocultar Etapa 2 e Exibir Etapa 3
+            document.getElementById("step-shuffle").classList.add("hidden");
+            const stepPicking = document.getElementById("step-picking");
+            stepPicking.classList.remove("hidden");
+            stepPicking.classList.add("flex");
+
+            // Resetar Interface dos Slots
+            for (let i = 1; i <= 6; i++) {
+                const slot = document.getElementById(`slot-${i}`);
+                slot.querySelector(".slot-card-preview").innerHTML = '<i class="fa-solid fa-plus text-xs"></i>';
+                slot.querySelector(".slot-card-preview").className = "slot-card-preview w-16 h-24 my-1 border border-dashed border-amber-500/40 rounded-lg flex items-center justify-center text-amber-500/30";
+                slot.querySelector(".slot-card-name").innerText = "Aguardando";
+                slot.classList.remove("border-amber-400", "gold-glow");
+            }
+
+            atualizarIndicadorPosicao();
+            renderizarLequeCartas();
+        }
+
+        function atualizarIndicadorPosicao() {
+            const idx = cartasSelecionadas.length;
+            if (idx < 6) {
+                const pos = POSICOES_TIRAGEM[idx];
+                document.getElementById("picking-indicator").innerText = `Escolha a Carta ${idx + 1} de 6`;
+                document.getElementById("position-title").innerText = `${pos.id}. ${pos.nome} (${pos.desc})`;
+
+                // Destaque no Slot Atual
+                for (let i = 1; i <= 6; i++) {
+                    const slot = document.getElementById(`slot-${i}`);
+                    if (i === idx + 1) {
+                        slot.classList.add("border-amber-400", "scale-105");
+                    } else {
+                        slot.classList.remove("border-amber-400", "scale-105");
+                    }
+                }
+            } else {
+                document.getElementById("picking-indicator").innerText = "Tiragem Completa!";
+                document.getElementById("position-title").innerText = "Todas as 6 cartas foram reveladas";
+                document.getElementById("reading-ready-container").classList.remove("hidden");
+            }
+        }
+
+        function renderizarLequeCartas() {
+            const container = document.getElementById("cards-fan-grid");
+            container.innerHTML = "";
+
+            // Exibir 18 cartas viradas para baixo
+            baralhoAtual.forEach((carta, index) => {
+                const cardWrapper = document.createElement("div");
+                cardWrapper.className = "card-container h-32 md:h-40";
+                cardWrapper.id = `card-fan-${index}`;
+
+                cardWrapper.innerHTML = `
+                    <div class="card-inner" onclick="selecionarCarta(${index})">
+                        <!-- Verso -->
+                        <div class="card-back border border-amber-400/50 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 p-1 flex flex-col justify-between items-center gold-glow">
+                            <div class="w-full text-right text-[8px] text-amber-400/60"><i class="fa-solid fa-star"></i></div>
+                            <div class="w-8 h-8 rounded-full border border-amber-400/40 flex items-center justify-center text-amber-300 text-sm bg-amber-500/10">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <div class="w-full text-left text-[8px] text-amber-400/60"><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <!-- Frente -->
+                        <div class="card-front border-2 border-amber-400 bg-slate-900 p-2 flex flex-col items-center justify-between text-center">
+                            <span class="text-[10px] font-bold text-amber-400 font-cinzel">${carta.numero}</span>
+                            <i class="fa-solid ${carta.icone} text-xl text-amber-300 my-1"></i>
+                            <span class="text-[9px] font-bold text-slate-200 truncate w-full">${carta.nome}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(cardWrapper);
+            });
+        }
+
+        function selecionarCarta(index) {
+            if (cartasSelecionadas.length >= 6) return;
+
+            const cardElem = document.getElementById(`card-fan-${index}`);
+            if (cardElem.classList.contains("selected")) return;
+
+            cardElem.classList.add("selected", "pointer-events-none", "opacity-30");
+
+            // Girar carta 3D no leque antes de encaixar no slot
+            const inner = cardElem.querySelector(".card-inner");
+            inner.classList.add("flipped");
+
+            const cartaSorteada = baralhoAtual[index];
+            const slotIndex = cartasSelecionadas.length + 1;
+
+            cartasSelecionadas.push({
+                posicaoId: slotIndex,
+                posicaoNome: POSICOES_TIRAGEM[slotIndex - 1].nome,
+                posicaoDesc: POSICOES_TIRAGEM[slotIndex - 1].desc,
+                arcano: cartaSorteada
+            });
+
+            // Atualizar Slot
+            const slot = document.getElementById(`slot-${slotIndex}`);
+            const slotPreview = slot.querySelector(".slot-card-preview");
+            
+            slotPreview.className = "slot-card-preview w-16 h-24 my-1 border-2 border-amber-400 rounded-lg flex flex-col items-center justify-between p-1 bg-slate-900 shadow-md";
+            slotPreview.innerHTML = `
+                <span class="text-[8px] font-bold text-amber-400">${cartaSorteada.numero}</span>
+                <i class="fa-solid ${cartaSorteada.icone} text-amber-300 text-sm"></i>
+                <span class="text-[7px] text-slate-300 truncate w-full text-center">${cartaSorteada.nome}</span>
+            `;
+
+            slot.querySelector(".slot-card-name").innerText = cartaSorteada.nome;
+            slot.querySelector(".slot-card-name").classList.add("text-amber-300");
+
+            atualizarIndicadorPosicao();
+        }
+
+        /* ==========================================================================
+           ETAPA 4: RELATÓRIO DA LEITURA COMPLETA
+           ========================================================================== */
+        function gerarRelatorioFinal() {
+            document.getElementById("step-picking").classList.add("hidden");
+            const stepReport = document.getElementById("step-report");
+            stepReport.classList.remove("hidden");
+            stepReport.classList.add("flex");
+
+            // Atualizar dados do usuario
+            document.getElementById("report-user-title").innerText = `Leitura Celestial de ${usuario.nome} ${usuario.sobrenome}`;
+            
+            const dataHoje = new Date().toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            });
+            document.getElementById("report-date").innerText = `Realizada em ${dataHoje}`;
+
+            // Renderizar os 6 cards detalhados
+            const container = document.getElementById("report-cards-container");
+            container.innerHTML = "";
+
+            cartasSelecionadas.forEach((item) => {
+                const arc = item.arcano;
+                const interpretacao = arc.significados[item.posicaoId];
+
+                const cardHTML = `
+                    <div class="glass-panel p-6 rounded-2xl border border-amber-500/30 flex flex-col md:flex-row gap-6 items-center md:items-start gold-glow">
+                        <!-- Arte da Carta na Leitura -->
+                        <div class="w-32 h-52 shrink-0 rounded-xl border-2 border-amber-400 bg-gradient-to-b ${arc.cor} p-3 flex flex-col items-center justify-between text-center shadow-2xl relative overflow-hidden">
+                            <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
+                            <div class="relative z-10 w-full flex justify-between items-center text-amber-300 text-xs font-bold font-cinzel">
+                                <span>${arc.numero}</span>
+                                <span><i class="fa-solid fa-sparkles"></i></span>
+                            </div>
+                            <div class="relative z-10 my-auto text-center">
+                                <i class="fa-solid ${arc.icone} text-4xl text-amber-200 drop-shadow-md"></i>
+                            </div>
+                            <div class="relative z-10 w-full font-cinzel font-bold text-sm text-amber-100 uppercase tracking-wider">
+                                ${arc.nome}
+                            </div>
+                        </div>
+
+                        <!-- Texto e Conteudo Detalhado -->
+                        <div class="flex-grow space-y-3 text-left">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                                    Posição ${item.posicaoId}: ${item.posicaoNome}
+                                </span>
+                                <span class="text-xs text-slate-400">• ${item.posicaoDesc}</span>
+                            </div>
+
+                            <h3 class="font-cinzel text-2xl font-bold text-amber-200">
+                                ${arc.nome} <span class="text-xs font-sans text-slate-400">(${arc.numero})</span>
+                            </h3>
+
+                            <div class="flex flex-wrap gap-1.5 my-2">
+                                ${arc.palavrasChave.map(p => `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] border border-slate-700">${p}</span>`).join('')}
+                            </div>
+
+                            <p class="text-sm md:text-base text-slate-200 leading-relaxed pt-1">
+                                ${interpretacao}
+                            </p>
+
+                            <div class="p-3 rounded-xl bg-amber-500/10 border-l-4 border-amber-400 text-xs text-amber-200">
+                                <strong class="uppercase tracking-wider font-bold block mb-0.5 text-amber-300">Conselho do Arcano:</strong>
+                                "${arc.conselho}"
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+
+            // Síntese Geral
+            const arcanosNomes = cartasSelecionadas.map(c => c.arcano.nome).join(", ");
+            document.getElementById("report-synthesis").innerText = 
+                `Prezado(a) ${usuario.nome}, sua tiragem apresenta uma sequência vibracional guiada por ${arcanosNomes}. ` +
+                `As energias mostram que o momento atual exige consciência para superar o desafio imediato e aproveitar a sabedoria acumulada no seu passado recente. ` +
+                `Siga com convicção o conselho recebido para que o desfecho se manifeste de maneira próspera e alinhada com o seu propósito divino.`;
+        }
+
+        function reiniciarTiragem() {
+            document.getElementById("step-report").classList.add("hidden");
+            document.getElementById("btn-embaralhar").disabled = false;
+            document.getElementById("btn-embaralhar").classList.remove("opacity-50", "cursor-not-allowed");
+            document.getElementById("reading-ready-container").classList.add("hidden");
+
+            const stepShuffle = document.getElementById("step-shuffle");
+            stepShuffle.classList.remove("hidden");
+            stepShuffle.classList.add("flex");
+        }
+
+        /* ==========================================================================
+           EFEITO VISUAL: STARFIELD CANVAS NO BACKGROUND
+           ========================================================================== */
+        window.onload = function () {
+            const canvas = document.getElementById("starfield");
+            const ctx = canvas.getContext("2d");
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener("resize", resize);
+
+            const stars = [];
+            for (let i = 0; i < 120; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.01 + 0.005
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.alpha += star.speed;
+                    if (star.alpha > 1 || star.alpha < 0) {
+                        star.speed = -star.speed;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(245, 158, 11, ${Math.abs(star.alpha)})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        };
+    </script>
+</body>
+</html>
