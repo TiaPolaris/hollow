@@ -535,8 +535,8 @@
                 <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-600/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                 </div>
-                <h3 class="font-cinzel text-2xl font-bold text-amber-300 mb-3">Síntese Holística da Tiragem</h3>
-                <p id="report-synthesis" class="text-sm md:text-base text-slate-300 leading-relaxed max-w-3xl mx-auto font-light">
+                <h3 class="font-cinzel text-2xl font-bold text-amber-300 mb-3">Resumo da Leitura</h3>
+                <p id="report-synthesis" class="text-sm md:text-base text-slate-300 leading-relaxed max-w-3xl mx-auto font-light text-left">
                     Aguardando geração do panorama...
                 </p>
 
@@ -2247,16 +2247,39 @@
                 container.appendChild(cardCard);
             });
 
-            // Síntese Holística das 6 Cartas
-            const cartaMomento = cartasSelecionadas[0].carta;
-            const cartaDesafio = cartasSelecionadas[1].carta;
-            const cartaDesfecho = cartasSelecionadas[5].carta;
+            // Resumo prático das 6 cartas
+            const momento = cartasSelecionadas[0].carta;
+            const desafio = cartasSelecionadas[1].carta;
+            const passado = cartasSelecionadas[2].carta;
+            const futuro = cartasSelecionadas[3].carta;
+            const conselho = cartasSelecionadas[4].carta;
+            const desfecho = cartasSelecionadas[5].carta;
 
-            document.getElementById('report-synthesis').innerHTML = `
-                Sua jornada neste momento é fortemente influenciada pela energia de <strong>${cartaMomento.nome}</strong>, que marca a tônica do seu presente. 
-                O principal desafio a ser dominado envolve <strong>${cartaDesafio.nome}</strong>, exigindo sabedoria para não cair em dispersão ou receios infundados. 
-                Ao aplicar as orientações recebidas e manter o alinhamento com seus valores mais elevados, o véu revela uma forte tendência de desfecho regida por <strong>${cartaDesfecho.nome}</strong>, promovendo a resolução almejada e o equilíbrio do seu caminho espiritual.
+            const resumoPratico = `
+                <div class="space-y-4 text-left">
+                    <div>
+                        <strong class="text-amber-300">O que a leitura mostra:</strong>
+                        <span> Você está vivendo um momento ligado a <strong>${momento.nome}</strong>. O que aconteceu antes, representado por <strong>${passado.nome}</strong>, ajuda a explicar por que essa situação chegou até aqui.</span>
+                    </div>
+                    <div>
+                        <strong class="text-amber-300">O ponto de atenção:</strong>
+                        <span> O maior desafio agora aparece em <strong>${desafio.nome}</strong>. Na prática, é uma área que pede mais cuidado, calma e escolhas conscientes.</span>
+                    </div>
+                    <div>
+                        <strong class="text-amber-300">O que fazer:</strong>
+                        <span> O conselho de <strong>${conselho.nome}</strong> é o caminho mais útil dentro desta leitura. Evite agir apenas no impulso e dê atenção ao que realmente está sob seu controle.</span>
+                    </div>
+                    <div>
+                        <strong class="text-amber-300">Daqui para frente:</strong>
+                        <span> <strong>${futuro.nome}</strong> mostra a tendência do próximo período, enquanto <strong>${desfecho.nome}</strong> aponta para onde a situação pode caminhar se as escolhas indicadas pela leitura forem colocadas em prática.</span>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-slate-200">
+                        <strong class="text-amber-200">Em poucas palavras:</strong> olhe para o que está acontecendo agora, enfrente o principal desafio sem fugir dele e concentre sua energia no que você pode mudar. A leitura serve como orientação, não como uma sentença sobre o seu futuro.
+                    </div>
+                </div>
             `;
+
+            document.getElementById('report-synthesis').innerHTML = resumoPratico;
         }
 
         function reiniciarTiragem() {
