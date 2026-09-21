@@ -127,7 +127,7 @@
             }
         }
 
-        /* Celular: baralho em grade vertical — SEM rolagem lateral */
+        /* Celular: baralho em grade vertical 4x20, sem carrossel horizontal */
         @media (max-width: 640px) {
             #cards-fan-grid {
                 width: 100% !important;
@@ -176,8 +176,8 @@
                 transform: translateY(-5px) scale(1.04) !important;
             }
 
-            /* Impede qualquer deslocamento horizontal causado pelo conteúdo */
-            html, body {
+            html,
+            body {
                 overflow-x: hidden !important;
             }
         }
@@ -659,8 +659,8 @@
         </button>
         <span id="som-status">Ativar o som</span>
     </div>
-    <audio id="musica-hollow" loop preload="none">
-        <source src="hollow-ritual.mp3" type="audio/mpeg">
+    <audio id="musica-hollow" loop preload="auto" autoplay>
+        <source src="./album/hollow-ritual.mp3" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
 
@@ -675,11 +675,13 @@
 
         /* ==========================================================================
            VÉU SONORO — MÚSICA AMBIENTE
-           Arquivo esperado: hollow-ritual.mp3 na mesma pasta deste HTML.
-           O áudio nunca inicia sozinho: o navegador exige uma ação do usuário.
+           Arquivo: ./album/hollow-ritual.mp3
+           Tenta iniciar automaticamente ao entrar. Se o navegador bloquear
+           autoplay com som, inicia no primeiro toque/clique/tecla do visitante.
            ========================================================================== */
         let somAtivo = false;
         let volumeSom = 0.24;
+        let tentativaInteracaoRegistrada = false;
 
         function atualizarControleSom() {
             const audio = document.getElementById('musica-hollow');
@@ -741,12 +743,59 @@
             }
         }
 
+        async function iniciarSomAutomaticamente() {
+            const audio = document.getElementById('musica-hollow');
+            if (!audio) return;
+
+            audio.volume = 0;
+
+            try {
+                await audio.play();
+                somAtivo = true;
+                atualizarControleSom();
+                fadeInSom(audio);
+            } catch (erro) {
+                /* Autoplay com áudio pode ser bloqueado pelo navegador.
+                   Nesse caso, aguardamos a primeira interação do visitante. */
+                somAtivo = false;
+                atualizarControleSom();
+            }
+        }
+
+        async function iniciarSomNaPrimeiraInteracao() {
+            if (tentativaInteracaoRegistrada) return;
+            tentativaInteracaoRegistrada = true;
+
+            const audio = document.getElementById('musica-hollow');
+            if (!audio || somAtivo) return;
+
+            try {
+                somAtivo = true;
+                atualizarControleSom();
+                await audio.play();
+                fadeInSom(audio);
+            } catch (erro) {
+                somAtivo = false;
+                atualizarControleSom();
+                console.warn('Não foi possível iniciar a música ambiente:', erro);
+            }
+
+            ['pointerdown', 'touchstart', 'keydown'].forEach(evento => {
+                document.removeEventListener(evento, iniciarSomNaPrimeiraInteracao, { passive: true });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('musica-hollow');
             if (audio) {
-                audio.volume = volumeSom;
+                audio.volume = 0;
                 atualizarControleSom();
+                iniciarSomAutomaticamente();
             }
+
+            ['pointerdown', 'touchstart', 'keydown'].forEach(evento => {
+                document.addEventListener(evento, iniciarSomNaPrimeiraInteracao, { passive: true, once: false });
+            });
         });
 
         /* ==========================================================================
@@ -2322,7 +2371,7 @@
             grid.innerHTML = '';
 
             // Renderiza as 78 cartas do baralho completo em leque.
-            // No celular, o CSS transforma o leque em uma grade vertical com rolagem da própria página.
+            // No celular, o CSS transforma automaticamente o leque em carrossel horizontal.
             const totalCartas = baralhoEmbaralhado.length;
             baralhoEmbaralhado.forEach((carta, index) => {
                 const cardEl = document.createElement('div');
