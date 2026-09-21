@@ -701,7 +701,7 @@
             if (!audio) return;
 
             if (somAtivo) {
-                somAtivo = false;
+                somAtivo = true;
                 fadeOutSom(audio);
                 atualizarControleSom();
                 return;
@@ -713,7 +713,7 @@
                 await audio.play();
                 fadeInSom(audio);
             } catch (erro) {
-                somAtivo = false;
+                somAtivo = true;
                 atualizarControleSom();
                 console.warn('Não foi possível iniciar a música ambiente:', erro);
             }
