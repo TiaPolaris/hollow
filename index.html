@@ -16,14 +16,6 @@
     <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
-        <!-- ================================================================
-         FAVICON DO HOLLOW — EDITE SOMENTE A LINHA ABAIXO
-         Coloque o arquivo na mesma pasta do HTML ou use uma URL direta.
-         Exemplo: href="favicon.png" ou href="https://seusite.com/favicon.png"
-         ================================================================ -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/Px67MWq0/2c8ab63f-1576-42a1-8af2-6b12d6738d85.png">
-
     <style>
         :root {
             --bg-space: #03020c;
@@ -251,16 +243,33 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #0891b2;
         }
+    
+        /* ================================================================
+           DESEMPENHO MOBILE — reduz efeitos caros sem alterar o visual-base
+           ================================================================ */
+        @media (max-width: 640px) {
+            .glass-panel,
+            .glass-card {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
 
-        /* Imagem opcional do card de WhatsApp */
-        .whatsapp-card-image {
-            background-image: var(--whatsapp-card-image);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        .whatsapp-card-image[style*="url"] i {
-            display: none;
+            .glass-panel {
+                box-shadow: 0 6px 22px rgba(0, 0, 0, 0.65);
+            }
+
+            .gold-glow {
+                box-shadow: 0 0 10px rgba(245, 158, 11, 0.28);
+            }
+
+            .gold-glow:hover {
+                box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+                transform: none;
+            }
+
+            #cards-fan-grid .card-container {
+                transition: opacity 0.15s ease;
+            }
         }
     </style>
 </head>
@@ -2146,9 +2155,7 @@
                             </div>
                             <div class="flex justify-between w-full text-amber-300/60 text-[8px]"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
                         </div>
-                        <div class="card-front bg-slate-950 border border-amber-400/60">
-                            <img src="${carta.imagem}" alt="${carta.nome}" class="w-full h-full object-cover block" loading="lazy">
-                        </div>
+                        <div class="card-front bg-slate-950 border border-amber-400/60" data-card-image="${carta.imagem}" aria-hidden="true"></div>
                     </div>
                 `;
                 grid.appendChild(cardEl);
@@ -2176,6 +2183,17 @@
             
             // Marca carta como selecionada
             cardEl.classList.add('pointer-events-none', 'scale-90');
+
+            // Carrega a imagem somente quando a carta é realmente escolhida.
+            const cardFront = cardEl.querySelector('.card-front');
+            if (!cardFront.querySelector('img')) {
+                const img = document.createElement('img');
+                img.src = cardFront.dataset.cardImage;
+                img.alt = cartaDados.nome;
+                img.className = 'w-full h-full object-cover block';
+                img.decoding = 'async';
+                cardFront.appendChild(img);
+            }
             cardEl.querySelector('.card-inner').classList.add('flipped');
 
             // Salva seleção
@@ -2341,6 +2359,25 @@
            ========================================================================== */
         window.onload = function() {
             const canvas = document.getElementById('starfield');
+
+            // Em celulares, o fundo fica estático para reduzir uso de CPU/bateria.
+            if (window.matchMedia('(max-width: 640px)').matches) {
+                canvas.width = Math.min(window.innerWidth, 480);
+                canvas.height = Math.min(window.innerHeight, 900);
+                const ctxMobile = canvas.getContext('2d');
+                const mobileColors = ['#ffffff', '#c084fc', '#22d3ee', '#fbbf24'];
+                const mobileStars = Math.min(45, Math.floor((canvas.width * canvas.height) / 9000));
+                for (let i = 0; i < mobileStars; i++) {
+                    ctxMobile.globalAlpha = Math.random() * 0.7 + 0.2;
+                    ctxMobile.fillStyle = mobileColors[Math.floor(Math.random() * mobileColors.length)];
+                    ctxMobile.beginPath();
+                    ctxMobile.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.1 + 0.2, 0, Math.PI * 2);
+                    ctxMobile.fill();
+                }
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
             const ctx = canvas.getContext('2d');
 
             let width = canvas.width = window.innerWidth;
