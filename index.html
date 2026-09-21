@@ -3,10 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOLLOW - Revele Seu Caminho | Tarot Online</title>
+    <title>HOLLOW | Oráculo das Bruxas • Tarô Celestial</title>
+
+    <!-- ================================================================
+         PRÉVIA DO LINK — WHATSAPP / DISCORD / FACEBOOK / ETC.
+         Edite SOMENTE os valores abaixo.
+         A imagem precisa estar publicada em uma URL pública.
+         Exemplo: https://seusite.com/hollow-preview.jpg
+         ================================================================ -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HOLLOW | Oráculo das Bruxas • Tarô Celestial">
+    <meta property="og:description" content="Revele o que vive além do véu. Uma leitura online do Oráculo das Bruxas.">
+    <meta property="og:image" content="https://SEU-DOMINIO.com/hollow-preview.jpg">
+    <meta property="og:image:alt" content="HOLLOW — Oráculo das Bruxas • Tarô Celestial">
+    <meta property="og:url" content="https://SEU-DOMINIO.com/">
+    <meta property="og:site_name" content="HOLLOW">
+
+    <!-- Prévia específica para WhatsApp/Telegram e outros compartilhadores -->
+    <meta name="description" content="Revele o que vive além do véu. Uma leitura online do Oráculo das Bruxas.">
+
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+
+    <!-- Tailwind CSS: carregamento não bloqueante -->
+    <script src="https://cdn.tailwindcss.com" defer></script>
     
     <!-- Fontes Google (Cinzel para títulos místicos e Plus Jakarta Sans para leitura) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +36,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- FontAwesome para Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+    <!-- ================================================================
+         FAVICON DO HOLLOW — EDITE SOMENTE A LINHA ABAIXO
+         Coloque o arquivo na mesma pasta do HTML ou use uma URL direta.
+         Exemplo: href="favicon.png" ou href="https://seusite.com/favicon.png"
+         ================================================================ -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preload" as="image" href="https://i.postimg.cc/pXNLRR0b/Hollow.png" fetchpriority="high">
 
     <style>
         :root {
@@ -129,6 +160,8 @@
 
         /* Celular: 4 fileiras fixas e rolagem horizontal, sem esmagar as cartas */
         @media (max-width: 640px) {
+            .glass-panel, .glass-card { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 6px 22px rgba(0,0,0,.65); }
+
             #cards-fan-grid {
                 max-width: none;
                 height: 500px;
@@ -243,33 +276,16 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #0891b2;
         }
-    
-        /* ================================================================
-           DESEMPENHO MOBILE — reduz efeitos caros sem alterar o visual-base
-           ================================================================ */
-        @media (max-width: 640px) {
-            .glass-panel,
-            .glass-card {
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
-            }
 
-            .glass-panel {
-                box-shadow: 0 6px 22px rgba(0, 0, 0, 0.65);
-            }
-
-            .gold-glow {
-                box-shadow: 0 0 10px rgba(245, 158, 11, 0.28);
-            }
-
-            .gold-glow:hover {
-                box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
-                transform: none;
-            }
-
-            #cards-fan-grid .card-container {
-                transition: opacity 0.15s ease;
-            }
+        /* Imagem opcional do card de WhatsApp */
+        .whatsapp-card-image {
+            background-image: var(--whatsapp-card-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .whatsapp-card-image[style*="url"] i {
+            display: none;
         }
     </style>
 </head>
@@ -2155,7 +2171,9 @@
                             </div>
                             <div class="flex justify-between w-full text-amber-300/60 text-[8px]"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
                         </div>
-                        <div class="card-front bg-slate-950 border border-amber-400/60" data-card-image="${carta.imagem}" aria-hidden="true"></div>
+                        <div class="card-front bg-slate-950 border border-amber-400/60">
+                            <img src="${carta.imagem}" alt="${carta.nome}" class="w-full h-full object-cover block" loading="lazy">
+                        </div>
                     </div>
                 `;
                 grid.appendChild(cardEl);
@@ -2183,17 +2201,6 @@
             
             // Marca carta como selecionada
             cardEl.classList.add('pointer-events-none', 'scale-90');
-
-            // Carrega a imagem somente quando a carta é realmente escolhida.
-            const cardFront = cardEl.querySelector('.card-front');
-            if (!cardFront.querySelector('img')) {
-                const img = document.createElement('img');
-                img.src = cardFront.dataset.cardImage;
-                img.alt = cartaDados.nome;
-                img.className = 'w-full h-full object-cover block';
-                img.decoding = 'async';
-                cardFront.appendChild(img);
-            }
             cardEl.querySelector('.card-inner').classList.add('flipped');
 
             // Salva seleção
@@ -2357,75 +2364,27 @@
         /* ==========================================================================
            CANVAS DE ESTRELAS COM CORES DA PALETA (ROXO, CIANO, DOURADO, BRANCO)
            ========================================================================== */
-        window.onload = function() {
+        window.addEventListener('load', function() {
             const canvas = document.getElementById('starfield');
-
-            // Em celulares, o fundo fica estático para reduzir uso de CPU/bateria.
-            if (window.matchMedia('(max-width: 640px)').matches) {
-                canvas.width = Math.min(window.innerWidth, 480);
-                canvas.height = Math.min(window.innerHeight, 900);
-                const ctxMobile = canvas.getContext('2d');
-                const mobileColors = ['#ffffff', '#c084fc', '#22d3ee', '#fbbf24'];
-                const mobileStars = Math.min(45, Math.floor((canvas.width * canvas.height) / 9000));
-                for (let i = 0; i < mobileStars; i++) {
-                    ctxMobile.globalAlpha = Math.random() * 0.7 + 0.2;
-                    ctxMobile.fillStyle = mobileColors[Math.floor(Math.random() * mobileColors.length)];
-                    ctxMobile.beginPath();
-                    ctxMobile.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.1 + 0.2, 0, Math.PI * 2);
-                    ctxMobile.fill();
-                }
-                return;
-            }
-
-            const ctx = canvas.getContext('2d');
-            const ctx = canvas.getContext('2d');
-
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const isMobile = window.matchMedia('(max-width: 640px)').matches;
             let width = canvas.width = window.innerWidth;
             let height = canvas.height = window.innerHeight;
-
-            window.addEventListener('resize', () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            });
-
             const colors = ['#ffffff', '#c084fc', '#22d3ee', '#fbbf24', '#a855f7'];
             const stars = [];
-            const numStars = Math.floor((width * height) / 3000);
-
-            for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 1.4 + 0.3,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    alpha: Math.random(),
-                    speed: Math.random() * 0.015 + 0.005
-                });
+            const numStars = isMobile ? Math.min(45, Math.floor((width * height) / 9000)) : Math.floor((width * height) / 3000);
+            for (let i = 0; i < numStars; i++) stars.push({x:Math.random()*width,y:Math.random()*height,radius:Math.random()*1.4+.3,color:colors[Math.floor(Math.random()*colors.length)],alpha:Math.random(),speed:Math.random()*.015+.005});
+            function draw(animate=false) {
+                ctx.clearRect(0,0,width,height);
+                stars.forEach(star => { if(animate){star.alpha+=star.speed;if(star.alpha>1||star.alpha<0)star.speed=-star.speed;} ctx.globalAlpha=Math.abs(star.alpha);ctx.fillStyle=star.color;ctx.beginPath();ctx.arc(star.x,star.y,star.radius,0,Math.PI*2);ctx.fill(); });
+                ctx.globalAlpha=1;
+                if(animate) requestAnimationFrame(()=>draw(true));
             }
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-
-                stars.forEach(star => {
-                    star.alpha += star.speed;
-                    if (star.alpha > 1 || star.alpha < 0) {
-                        star.speed = -star.speed;
-                    }
-
-                    ctx.save();
-                    ctx.globalAlpha = Math.abs(star.alpha);
-                    ctx.fillStyle = star.color;
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        };
+            draw(!isMobile);
+            let resizeTimer;
+            window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;draw(!isMobile);},150);},{passive:true});
+        });
     </script>
 </body>
 </html>
