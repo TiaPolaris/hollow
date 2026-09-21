@@ -391,12 +391,12 @@
                     <label for="pergunta-leitura" class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2 text-left">
                         Qual é a sua pergunta?
                     </label>
-                    <textarea id="pergunta-leitura" rows="3" maxlength="500"
-                        placeholder="Escreva aqui o que você quer perguntar ao baralho..."
+                    <textarea id="pergunta-leitura" rows="3" maxlength="500" minlength="35"
+                        placeholder="Ex.: Eu vou arruma um emprego ainda esse ano?"
                         oninput="atualizarPergunta()"
                         class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-purple-500/30 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/40 transition-all text-sm resize-none"></textarea>
                     <div class="flex items-center justify-between mt-2 px-1">
-                        <span class="text-[10px] text-slate-500">Não precisa ser uma pergunta perfeita. Escreva como você sente.</span>
+                        <span id="ajuda-pergunta" class="text-[10px] text-slate-500">Escreva uma pergunta objetiva, com pelo menos 35 caracteres.</span>
                         <span id="contador-pergunta" class="text-[10px] text-slate-500">0/500</span>
                     </div>
                 </div>
@@ -2088,8 +2088,10 @@
             const btn = document.getElementById('btn-embaralhar');
             if (!campo || !contador || !btn) return;
 
-            contador.innerText = `${campo.value.length}/500`;
-            const preenchida = campo.value.trim().length > 0;
+            const minimo = 35;
+
+            contador.innerText = `${campo.value.length}/1000`;
+            const preenchida = campo.value.trim().length >= minimo;
             btn.disabled = !preenchida;
             btn.classList.toggle('opacity-50', !preenchida);
             btn.classList.toggle('cursor-not-allowed', !preenchida);
@@ -2098,7 +2100,10 @@
         function executarEmbaralhar() {
             const campoPergunta = document.getElementById('pergunta-leitura');
             const pergunta = campoPergunta ? campoPergunta.value.trim() : '';
-            if (!pergunta) return;
+            if (pergunta.length < 35) {
+                atualizarPergunta();
+                return;
+            }
 
             perguntaUsuario = pergunta;
 
