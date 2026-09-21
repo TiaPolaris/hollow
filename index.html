@@ -127,33 +127,30 @@
             }
         }
 
-        /* Celular: 4 fileiras fixas e rolagem horizontal, sem esmagar as cartas */
+        /* Celular: baralho em grade vertical — rolagem acompanha a página */
         @media (max-width: 640px) {
             #cards-fan-grid {
-                max-width: none;
-                height: 500px;
-                padding: 12px 16px 18px;
+                max-width: 100%;
+                height: auto;
+                padding: 12px 12px 24px;
                 display: grid;
-                grid-template-rows: repeat(4, 108px);
-                grid-template-columns: none;
-                grid-auto-flow: column;
-                grid-auto-columns: 74px;
-                gap: 10px 9px;
-                justify-content: start;
-                overflow-x: auto;
-                overflow-y: hidden;
-                scroll-snap-type: x proximity;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: thin;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                grid-auto-flow: row;
+                grid-auto-rows: auto;
+                gap: 10px 8px;
+                justify-content: center;
+                overflow: visible;
             }
 
             #cards-fan-grid .card-container,
             #cards-fan-grid .card-container:first-child {
-                width: 74px;
-                height: 108px;
-                min-width: 74px;
+                width: 100%;
+                max-width: 74px;
+                aspect-ratio: 74 / 108;
+                height: auto;
+                min-width: 0;
+                justify-self: center;
                 transform: none !important;
-                scroll-snap-align: center;
             }
 
             #cards-fan-grid .card-container:hover {
@@ -638,10 +635,11 @@
         </button>
         <span id="som-status">Ativar o som</span>
     </div>
-   <audio id="musica-hollow" loop preload="none">
-    <source src="./album/hollow-ritual.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-</audio>
+    <audio id="musica-hollow" loop preload="none">
+        <source src="hollow-ritual.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
     <!-- Rodapé -->
     <footer class="relative z-10 text-center py-6 text-xs text-slate-400 border-t border-slate-900/80 mt-12 bg-slate-950/40">
         <p>• Pra Onde O Caminho de Te Leva? •</p>
@@ -656,7 +654,7 @@
            Arquivo esperado: hollow-ritual.mp3 na mesma pasta deste HTML.
            O áudio nunca inicia sozinho: o navegador exige uma ação do usuário.
            ========================================================================== */
-        let somAtivo = true;
+        let somAtivo = false;
         let volumeSom = 0.24;
 
         function atualizarControleSom() {
@@ -701,7 +699,7 @@
             if (!audio) return;
 
             if (somAtivo) {
-                somAtivo = true;
+                somAtivo = false;
                 fadeOutSom(audio);
                 atualizarControleSom();
                 return;
@@ -713,7 +711,7 @@
                 await audio.play();
                 fadeInSom(audio);
             } catch (erro) {
-                somAtivo = true;
+                somAtivo = false;
                 atualizarControleSom();
                 console.warn('Não foi possível iniciar a música ambiente:', erro);
             }
