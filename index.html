@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Favicon / Ícone da Aba -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- HOLLOW: Favicon + prévia para WhatsApp e redes sociais -->
     <link rel="icon" type="image/png" href="https://i.postimg.cc/Px67MWq0/2c8ab63f-1576-42a1-8af2-6b12d6738d85.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/Px67MWq0/2c8ab63f-1576-42a1-8af2-6b12d6738d85.png">
 
-    <!-- Meta Tags para Prévia no WhatsApp / Redes Sociais -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="HOLLOW — Oráculo das Bruxas">
     <meta property="og:description" content="Entre no Véu, faça sua pergunta e revele as cartas que podem iluminar o seu caminho.">
+    <meta property="og:url" content="https://tiapolaris.github.io/hollow/">
     <meta property="og:image" content="https://i.postimg.cc/DZCNcrzt/hollows.png">
+    <meta property="og:image:secure_url" content="https://i.postimg.cc/DZCNcrzt/hollows.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HOLLOW — Oráculo das Bruxas">
+    <meta name="twitter:description" content="Entre no Véu, faça sua pergunta e revele as cartas que podem iluminar o seu caminho.">
+    <meta name="twitter:image" content="https://i.postimg.cc/DZCNcrzt/hollows.png">
     <title>HOLLOW - Revele Seu Caminho | Tarot Online</title>
     
     <!-- Tailwind CSS -->
@@ -309,7 +315,63 @@
             }
             #btn-som { width: 28px; height: 28px; }
         }
-    </style>
+    
+
+        /* Celular: baralho em grade vertical 4x20, sem carrossel horizontal */
+        @media (max-width: 640px) {
+            #cards-fan-grid {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                height: auto !important;
+                box-sizing: border-box !important;
+                padding: 12px 12px 28px !important;
+                display: grid !important;
+                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+                grid-template-rows: none !important;
+                grid-auto-flow: row !important;
+                grid-auto-columns: auto !important;
+                grid-auto-rows: auto !important;
+                gap: 10px 8px !important;
+                justify-content: center !important;
+                align-content: start !important;
+                overflow: visible !important;
+                overflow-x: visible !important;
+                overflow-y: visible !important;
+            }
+
+            #cards-fan-grid .card-container,
+            #cards-fan-grid .card-container:first-child {
+                width: min(100%, 74px) !important;
+                max-width: 74px !important;
+                min-width: 0 !important;
+                height: 108px !important;
+                aspect-ratio: auto !important;
+                justify-self: center !important;
+                transform: none !important;
+                margin: 0 !important;
+                left: auto !important;
+                right: auto !important;
+            }
+
+            #cards-fan-grid .card-inner,
+            #cards-fan-grid .card-front,
+            #cards-fan-grid .card-back {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+            }
+
+            #cards-fan-grid .card-container:hover {
+                transform: translateY(-5px) scale(1.04) !important;
+            }
+
+            html,
+            body {
+                overflow-x: hidden !important;
+            }
+        }
+</style>
 </head>
 <body class="relative min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden">
 
@@ -631,6 +693,11 @@
                         class="py-3 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-purple-500/40 font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-2">
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>Realizar Nova Tiragem</span>
+                    </button>
+                    <button onclick="compartilharWhatsApp()"
+                        class="py-3 px-8 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-green-600/20">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span>Compartilhar no WhatsApp</span>
                     </button>
                     <button onclick="window.print()" 
                         class="py-3 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-amber-600/20">
@@ -2542,6 +2609,60 @@
             `;
 
             document.getElementById('report-synthesis').innerHTML = resumoPratico;
+        }
+
+        /* ==========================================================================
+           COMPARTILHAR LEITURA PELO WHATSAPP
+           Abre o WhatsApp com a leitura completa já formatada.
+           O envio final continua sendo confirmado pelo próprio usuário.
+           ========================================================================== */
+        function compartilharWhatsApp() {
+            if (!cartasSelecionadas || cartasSelecionadas.length < 6) return;
+
+            let texto = `🔮 *HOLLOW — Leitura do Véu*\n\n`;
+            texto += `👤 *Consulente:* ${usuarioData.nome} ${usuarioData.sobrenome}`.trim() + `\n`;
+
+            if (perguntaUsuario) {
+                texto += `❓ *Pergunta:* ${perguntaUsuario.trim()}\n`;
+            }
+
+            texto += `\n✨ *Suas 6 cartas:*\n\n`;
+
+            cartasSelecionadas.forEach((item) => {
+                const c = item.carta;
+                const interpretacao = c.significados[item.posicao] || '';
+
+                texto += `*${item.posicaoNome}*\n`;
+                texto += `🃏 *${c.nome}*\n`;
+                texto += `🔑 ${c.palavrasChave.join(', ')}\n`;
+                texto += `💭 ${interpretacao}\n`;
+                texto += `🌙 *Orientação:* ${c.conselho}\n\n`;
+            });
+
+            const momento = cartasSelecionadas[0].carta;
+            const desafio = cartasSelecionadas[1].carta;
+            const passado = cartasSelecionadas[2].carta;
+            const futuro = cartasSelecionadas[3].carta;
+            const conselho = cartasSelecionadas[4].carta;
+            const desfecho = cartasSelecionadas[5].carta;
+
+            const temas = (carta, limite = 3) => {
+                return carta.palavrasChave
+                    .slice(0, limite)
+                    .map(p => p.toLowerCase())
+                    .join(', ');
+            };
+
+            texto += `━━━━━━━━━━━━━━━━━━━━\n`;
+            texto += `🌌 *RESUMO DA LEITURA*\n\n`;
+            texto += `Pelo que aparece nessa leitura, você está passando por uma fase em que *${temas(momento)}* ganham bastante importância. Há coisas do passado, ligadas a *${temas(passado, 2)}*, que ainda pesam nas escolhas de agora, mas isso não significa que você esteja preso ao que já aconteceu.\n\n`;
+            texto += `O que mais merece atenção neste momento é *${temas(desafio)}*. Em vez de tentar resolver tudo de uma vez, a leitura aponta para *${temas(conselho)}*: agir com mais consciência, respeitar seu próprio tempo e escolher melhor onde colocar sua energia.\n\n`;
+            texto += `Daqui para frente, podem surgir situações relacionadas a *${temas(futuro, 2)}*. Se conseguir manter esse equilíbrio, o caminho tende a ficar mais claro e favorecer *${temas(desfecho)}*.\n\n`;
+            texto += `No fim das contas, a mensagem é simples: *olhe para o que está acontecendo de verdade, cuide do que depende de você e não tente controlar aquilo que está fora das suas mãos.*\n\n`;
+            texto += `🔮 *HOLLOW — Pra Onde O Caminho Te Leva?*`;
+
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         function reiniciarTiragem() {
