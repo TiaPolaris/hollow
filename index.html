@@ -127,30 +127,33 @@
             }
         }
 
-        /* Celular: baralho em grade vertical — rolagem acompanha a página */
+        /* Celular: 4 fileiras fixas e rolagem horizontal, sem esmagar as cartas */
         @media (max-width: 640px) {
             #cards-fan-grid {
-                max-width: 100%;
-                height: auto;
-                padding: 12px 12px 24px;
+                max-width: none;
+                height: 500px;
+                padding: 12px 16px 18px;
                 display: grid;
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-                grid-auto-flow: row;
-                grid-auto-rows: auto;
-                gap: 10px 8px;
-                justify-content: center;
-                overflow: visible;
+                grid-template-rows: repeat(4, 108px);
+                grid-template-columns: none;
+                grid-auto-flow: column;
+                grid-auto-columns: 74px;
+                gap: 10px 9px;
+                justify-content: start;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x proximity;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
             }
 
             #cards-fan-grid .card-container,
             #cards-fan-grid .card-container:first-child {
-                width: 100%;
-                max-width: 74px;
-                aspect-ratio: 74 / 108;
-                height: auto;
-                min-width: 0;
-                justify-self: center;
+                width: 74px;
+                height: 108px;
+                min-width: 74px;
                 transform: none !important;
+                scroll-snap-align: center;
             }
 
             #cards-fan-grid .card-container:hover {
@@ -635,8 +638,8 @@
         </button>
         <span id="som-status">Ativar o som</span>
     </div>
-    <audio id="musica-hollow" loop preload="none">
-        <source src="hollow-ritual.mp3" type="audio/mpeg">
+    <audio id="musica-hollow" loop preload="auto" autoplay>
+        <source src="./album/hollow-ritual.mp3" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
 
@@ -651,11 +654,13 @@
 
         /* ==========================================================================
            VÉU SONORO — MÚSICA AMBIENTE
-           Arquivo esperado: hollow-ritual.mp3 na mesma pasta deste HTML.
-           O áudio nunca inicia sozinho: o navegador exige uma ação do usuário.
+           Arquivo: ./album/hollow-ritual.mp3
+           Tenta iniciar automaticamente ao entrar. Se o navegador bloquear
+           autoplay com som, inicia no primeiro toque/clique/tecla do visitante.
            ========================================================================== */
         let somAtivo = false;
         let volumeSom = 0.24;
+        let tentativaInteracaoRegistrada = false;
 
         function atualizarControleSom() {
             const audio = document.getElementById('musica-hollow');
@@ -717,12 +722,59 @@
             }
         }
 
+        async function iniciarSomAutomaticamente() {
+            const audio = document.getElementById('musica-hollow');
+            if (!audio) return;
+
+            audio.volume = 0;
+
+            try {
+                await audio.play();
+                somAtivo = true;
+                atualizarControleSom();
+                fadeInSom(audio);
+            } catch (erro) {
+                /* Autoplay com áudio pode ser bloqueado pelo navegador.
+                   Nesse caso, aguardamos a primeira interação do visitante. */
+                somAtivo = false;
+                atualizarControleSom();
+            }
+        }
+
+        async function iniciarSomNaPrimeiraInteracao() {
+            if (tentativaInteracaoRegistrada) return;
+            tentativaInteracaoRegistrada = true;
+
+            const audio = document.getElementById('musica-hollow');
+            if (!audio || somAtivo) return;
+
+            try {
+                somAtivo = true;
+                atualizarControleSom();
+                await audio.play();
+                fadeInSom(audio);
+            } catch (erro) {
+                somAtivo = false;
+                atualizarControleSom();
+                console.warn('Não foi possível iniciar a música ambiente:', erro);
+            }
+
+            ['pointerdown', 'touchstart', 'keydown'].forEach(evento => {
+                document.removeEventListener(evento, iniciarSomNaPrimeiraInteracao, { passive: true });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('musica-hollow');
             if (audio) {
-                audio.volume = volumeSom;
+                audio.volume = 0;
                 atualizarControleSom();
+                iniciarSomAutomaticamente();
             }
+
+            ['pointerdown', 'touchstart', 'keydown'].forEach(evento => {
+                document.addEventListener(evento, iniciarSomNaPrimeiraInteracao, { passive: true, once: false });
+            });
         });
 
         /* ==========================================================================
