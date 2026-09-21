@@ -243,6 +243,59 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #0891b2;
         }
+
+        /* Controle musical do Véu */
+        #controle-som {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            border-radius: 999px;
+            background: rgba(2, 6, 23, 0.82);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 30px rgba(0,0,0,.28);
+            color: #cbd5e1;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            transition: all .3s ease;
+        }
+        #controle-som:hover {
+            border-color: rgba(245, 158, 11, 0.55);
+            transform: translateY(-2px);
+        }
+        #btn-som {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(245, 158, 11, .35);
+            background: rgba(124, 58, 237, .22);
+            color: #fcd34d;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+        #btn-som:hover {
+            background: rgba(124, 58, 237, .4);
+            box-shadow: 0 0 18px rgba(168, 85, 247, .25);
+        }
+        #som-status { opacity: .78; }
+        @media (max-width: 640px) {
+            #controle-som {
+                right: 10px;
+                bottom: 10px;
+                padding: 7px 9px;
+                font-size: 9px;
+            }
+            #btn-som { width: 28px; height: 28px; }
+        }
     </style>
 </head>
 <body class="relative min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden">
@@ -577,6 +630,19 @@
 
     </div>
 
+
+    <!-- Véu Sonoro: a música só começa após uma ação do usuário -->
+    <div id="controle-som" aria-label="Controle da música ambiente">
+        <button id="btn-som" type="button" onclick="alternarSom()" aria-label="Ativar música ambiente" aria-pressed="false">
+            <i id="icone-som" class="fa-solid fa-volume-xmark"></i>
+        </button>
+        <span id="som-status">Ativar o som</span>
+    </div>
+    <audio id="musica-hollow" loop preload="none">
+        <source src="hollow-ritual.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
     <!-- Rodapé -->
     <footer class="relative z-10 text-center py-6 text-xs text-slate-400 border-t border-slate-900/80 mt-12 bg-slate-950/40">
         <p>• Pra Onde O Caminho de Te Leva? •</p>
@@ -585,6 +651,83 @@
     </footer>
 
     <script>
+
+        /* ==========================================================================
+           VÉU SONORO — MÚSICA AMBIENTE
+           Arquivo esperado: hollow-ritual.mp3 na mesma pasta deste HTML.
+           O áudio nunca inicia sozinho: o navegador exige uma ação do usuário.
+           ========================================================================== */
+        let somAtivo = false;
+        let volumeSom = 0.24;
+
+        function atualizarControleSom() {
+            const audio = document.getElementById('musica-hollow');
+            const btn = document.getElementById('btn-som');
+            const icone = document.getElementById('icone-som');
+            const status = document.getElementById('som-status');
+            if (!audio || !btn || !icone || !status) return;
+
+            audio.volume = volumeSom;
+            btn.setAttribute('aria-pressed', somAtivo ? 'true' : 'false');
+            btn.setAttribute('aria-label', somAtivo ? 'Desativar música ambiente' : 'Ativar música ambiente');
+            icone.className = somAtivo ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+            status.innerText = somAtivo ? 'Som do Véu' : 'Ativar o som';
+        }
+
+        function fadeInSom(audio, duracao = 1800) {
+            audio.volume = 0;
+            const inicio = performance.now();
+            function aumentar(agora) {
+                const progresso = Math.min((agora - inicio) / duracao, 1);
+                audio.volume = volumeSom * progresso;
+                if (progresso < 1 && somAtivo) requestAnimationFrame(aumentar);
+            }
+            requestAnimationFrame(aumentar);
+        }
+
+        function fadeOutSom(audio, duracao = 700) {
+            const volumeInicial = audio.volume;
+            const inicio = performance.now();
+            function diminuir(agora) {
+                const progresso = Math.min((agora - inicio) / duracao, 1);
+                audio.volume = volumeInicial * (1 - progresso);
+                if (progresso < 1) requestAnimationFrame(diminuir);
+                else audio.pause();
+            }
+            requestAnimationFrame(diminuir);
+        }
+
+        async function alternarSom() {
+            const audio = document.getElementById('musica-hollow');
+            if (!audio) return;
+
+            if (somAtivo) {
+                somAtivo = false;
+                fadeOutSom(audio);
+                atualizarControleSom();
+                return;
+            }
+
+            try {
+                somAtivo = true;
+                atualizarControleSom();
+                await audio.play();
+                fadeInSom(audio);
+            } catch (erro) {
+                somAtivo = false;
+                atualizarControleSom();
+                console.warn('Não foi possível iniciar a música ambiente:', erro);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('musica-hollow');
+            if (audio) {
+                audio.volume = volumeSom;
+                atualizarControleSom();
+            }
+        });
+
         /* ==========================================================================
            BANCO DE DADOS DOS ARCANOS MAIORES COM PALETAS CÓSMICAS E INTERPRETAÇÕES
            ========================================================================== */
@@ -2090,7 +2233,7 @@
 
             const minimo = 35;
 
-            contador.innerText = `${campo.value.length}/1000`;
+            contador.innerText = `${campo.value.length}/500`;
             const preenchida = campo.value.trim().length >= minimo;
             btn.disabled = !preenchida;
             btn.classList.toggle('opacity-50', !preenchida);
