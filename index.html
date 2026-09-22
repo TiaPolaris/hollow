@@ -472,6 +472,170 @@
     </div>
 </section>
 
+
+        <!-- ========================================== -->
+        <!-- ETAPA 1B: ESCOLHA DA JORNADA               -->
+        <!-- Adicionado sem alterar a identidade visual -->
+        <!-- ========================================== -->
+        <section id="step-choice" class="hidden max-w-2xl mx-auto w-full transition-all duration-500">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
+
+                <div class="text-center mb-7">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-600/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl shadow-lg">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <p class="text-xs text-amber-300 uppercase tracking-[0.22em]">Escolha seu caminho</p>
+                    <h2 class="font-cinzel text-2xl md:text-3xl font-bold text-amber-200 mt-1">Por onde começamos?</h2>
+                    <p class="text-xs text-slate-300 mt-2 max-w-lg mx-auto leading-relaxed">
+                        Você pode consultar as cartas diretamente ou começar pelo seu céu de nascimento para tornar a experiência mais pessoal.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <button type="button" onclick="abrirContextoTarot()"
+                        class="glass-card rounded-2xl p-5 text-left border border-amber-500/30 hover:border-amber-400/70 transition-all group">
+                        <div class="w-11 h-11 rounded-xl bg-purple-950/70 border border-purple-400/40 flex items-center justify-center text-amber-300 text-xl mb-4 group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-clover"></i>
+                        </div>
+                        <h3 class="font-cinzel text-xl font-bold text-amber-200">Tarot</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">Faça uma pergunta e revele as cartas que podem trazer novas perspectivas para o seu momento.</p>
+                        <span class="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-wider text-cyan-300">
+                            Entrar no Tarot <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </button>
+
+                    <button type="button" onclick="abrirCadastroAstral()"
+                        class="glass-card rounded-2xl p-5 text-left border border-amber-500/30 hover:border-amber-400/70 transition-all group">
+                        <div class="w-11 h-11 rounded-xl bg-cyan-950/60 border border-cyan-400/40 flex items-center justify-center text-amber-300 text-xl mb-4 group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-star-and-crescent"></i>
+                        </div>
+                        <h3 class="font-cinzel text-xl font-bold text-amber-200">Mapa Astral</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">Descubra os principais pontos do seu mapa natal e, depois, continue para uma leitura de Tarot contextualizada.</p>
+                        <span class="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-wider text-cyan-300">
+                            Abrir meu mapa <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA 1C: PERSONALIZAÇÃO DO TAROT          -->
+        <!-- ========================================== -->
+        <section id="step-tarot-context-choice" class="hidden max-w-xl mx-auto w-full transition-all duration-500">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden text-center">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
+
+                <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-600/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl shadow-lg">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+                <p class="text-xs text-amber-300 uppercase tracking-[0.2em]">Antes de atravessar o véu</p>
+                <h2 class="font-cinzel text-2xl md:text-3xl font-bold text-amber-200 mt-2">Quer tornar sua leitura mais pessoal?</h2>
+                <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+                    Faça seu <strong class="text-amber-200">Mapa Astral</strong> antes da consulta e permita que o HOLLOW use aspectos da sua personalidade e do seu céu de nascimento para contextualizar as cartas.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3 mt-7">
+                    <button type="button" onclick="escolherTarotComMapa()"
+                        class="flex-1 py-3.5 px-5 rounded-xl bg-gradient-to-r from-purple-700 via-indigo-600 to-cyan-600 hover:from-purple-600 hover:to-cyan-500 text-white font-bold tracking-wider uppercase text-xs shadow-lg shadow-purple-900/40 transition-all border border-amber-400/30">
+                        <i class="fa-solid fa-star-and-crescent text-amber-300 mr-1"></i>
+                        Sim, quero
+                    </button>
+                    <button type="button" onclick="escolherTarotDireto()"
+                        class="flex-1 py-3.5 px-5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-amber-200 border border-purple-500/40 font-bold tracking-wider uppercase text-xs transition-all">
+                        Seguir direto
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA MAPA ASTRAL: MINI CADASTRO           -->
+        <!-- ========================================== -->
+        <section id="step-astral-register" class="hidden max-w-md mx-auto w-full transition-all duration-500">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-600/20 rounded-full blur-2xl"></div>
+
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-600/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl shadow-lg">
+                        <i class="fa-solid fa-star-and-crescent"></i>
+                    </div>
+                    <h2 class="font-cinzel text-2xl font-bold text-amber-200">Seu Mapa Astral</h2>
+                    <p class="text-xs text-slate-300 mt-1">Precisamos de alguns dados para localizar seu céu de nascimento.</p>
+                </div>
+
+                <form id="form-astral" class="space-y-4" onsubmit="processarCadastroAstral(event)">
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Nome Completo</label>
+                        <input type="text" id="astral-nome" required placeholder="Seu Nome Completo"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-purple-500/30 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Data de Nascimento</label>
+                        <input type="date" id="astral-data" required
+                            class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-purple-500/30 text-slate-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Hora Exata de Nascimento</label>
+                        <input type="time" id="astral-hora" required
+                            class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-purple-500/30 text-slate-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Cidade de Nascimento</label>
+                        <input type="text" id="astral-cidade" required placeholder="Ex.: São Paulo, SP"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-purple-500/30 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-sm">
+                    </div>
+
+                    <div id="astral-erro" class="hidden p-3 rounded-lg bg-rose-950/90 border border-rose-500/50 text-rose-200 text-xs text-center"></div>
+                    <div id="astral-status" class="hidden text-center text-xs text-cyan-300 py-2"></div>
+
+                    <button type="submit" id="btn-calcular-astral"
+                        class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-purple-700 via-indigo-600 to-cyan-600 hover:from-purple-600 hover:to-cyan-500 text-white font-bold tracking-wider uppercase text-sm shadow-lg shadow-purple-900/40 transition-all border border-amber-400/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                        <span>Calcular Meu Mapa</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ETAPA MAPA ASTRAL: RESULTADO               -->
+        <!-- ========================================== -->
+        <section id="step-astral-result" class="hidden w-full transition-all duration-500">
+            <div class="glass-panel p-5 md:p-8 rounded-3xl w-full border border-amber-500/30">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Seu Céu de Nascimento</span>
+                    <h2 id="astral-result-title" class="font-cinzel text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-amber-200 to-cyan-200 mt-1">Seu Mapa Astral</h2>
+                    <p id="astral-result-location" class="text-xs text-slate-400 mt-2"></p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6 items-center">
+                    <div class="glass-card rounded-2xl p-3 border border-purple-500/30">
+                        <div id="astral-wheel" class="w-full max-w-[480px] mx-auto aspect-square"></div>
+                    </div>
+                    <div>
+                        <div id="astral-highlights" class="space-y-3"></div>
+                        <div id="astral-aspects" class="mt-5"></div>
+                    </div>
+                </div>
+
+                <div class="mt-7 pt-6 border-t border-slate-800 text-center">
+                    <p class="text-[11px] text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                        O mapa astral é apresentado como uma ferramenta simbólica de autoconhecimento. Ele não determina seu futuro nem substitui suas próprias escolhas.
+                    </p>
+                    <button type="button" onclick="iniciarTarotComMapa()"
+                        class="mt-5 py-3.5 px-8 rounded-xl bg-gradient-to-r from-purple-700 via-indigo-600 to-cyan-600 hover:from-purple-600 hover:to-cyan-500 text-white font-bold tracking-wider uppercase text-sm shadow-lg shadow-purple-900/40 transition-all border border-amber-400/30">
+                        <i class="fa-solid fa-clover text-amber-300 mr-1"></i>
+                        Continuar para o Tarot
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- ========================================== -->
         <!-- ETAPA 1: FORMULÁRIO DE CADASTRO (+18)     -->
         <!-- ========================================== -->
@@ -534,6 +698,15 @@
                 <div class="max-w-md mb-6 text-sm text-slate-300 leading-relaxed">
                     <p>Antes de tocar nas cartas, pare por alguns segundos.</p>
                     <p class="mt-2 text-slate-400">Respire, deixe o barulho de fora e pense no que realmente está querendo entender neste momento.</p>
+                </div>
+
+                <div id="astral-tarot-context" class="hidden w-full max-w-md mb-5 p-4 rounded-xl bg-purple-950/40 border border-cyan-500/20 text-left">
+                    <div class="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-star-and-crescent"></i>
+                        <span>Contexto do seu Mapa Astral</span>
+                    </div>
+                    <p id="astral-tarot-context-text" class="text-xs text-slate-300 mt-2 leading-relaxed"></p>
+                    <div id="astral-tarot-tags" class="flex flex-wrap gap-1.5 mt-3"></div>
                 </div>
 
                 <!-- Pergunta da leitura: aparece suavemente depois da introdução -->
@@ -2299,6 +2472,8 @@
             dataNascimento: ""
         };
 
+        let mapaAstralData = null;
+        let leituraComMapaAstral = false;
         let perguntaUsuario = "";
         let baralhoEmbaralhado = [];
         let cartasSelecionadas = [];
@@ -2375,10 +2550,388 @@
         /* ==========================================================================
            LÓGICA DA ETAPA 1: VALIDAR IDADE (+18)
            ========================================================================== */
+        function esconderEtapasPrincipais() {
+            [
+                'step-payment',
+                'step-choice',
+                'step-tarot-context-choice',
+                'step-register',
+                'step-astral-register',
+                'step-astral-result',
+                'step-shuffle',
+                'step-picking',
+                'step-report'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+        }
+
+        function mostrarEtapa(id, comoFlex = false) {
+            esconderEtapasPrincipais();
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('hidden');
+            if (comoFlex) el.classList.add('flex');
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function liberarCadastro() {
-            document.getElementById('step-payment').classList.add('hidden');
-            document.getElementById('step-register').classList.remove('hidden');
-            document.getElementById('step-register').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            mostrarEtapa('step-choice');
+        }
+
+        function abrirContextoTarot() {
+            mostrarEtapa('step-tarot-context-choice');
+        }
+
+        function escolherTarotComMapa() {
+            leituraComMapaAstral = true;
+            mostrarEtapa('step-astral-register');
+        }
+
+        function escolherTarotDireto() {
+            leituraComMapaAstral = false;
+            mostrarEtapa('step-register');
+        }
+
+        function abrirCadastroAstral() {
+            leituraComMapaAstral = true;
+            mostrarEtapa('step-astral-register');
+        }
+
+        function calcularIdade(dataStr) {
+            const nascimento = new Date(dataStr + 'T00:00:00');
+            const hoje = new Date();
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const m = hoje.getMonth() - nascimento.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+            return idade;
+        }
+
+        let swissAstral = null;
+
+        async function carregarSwissEphemeris() {
+            if (swissAstral) return swissAstral;
+            const modulo = await import('https://cdn.jsdelivr.net/npm/@swisseph/browser@1.3.1/dist/swisseph-browser.js');
+            swissAstral = new modulo.SwissEphemeris();
+            await swissAstral.init();
+            return swissAstral;
+        }
+
+        async function geocodificarCidade(cidade) {
+            const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=5&language=pt&format=json`;
+            const resposta = await fetch(url);
+            if (!resposta.ok) throw new Error('Não foi possível consultar a cidade.');
+            const dados = await resposta.json();
+            if (!dados.results || !dados.results.length) throw new Error('Cidade não encontrada. Tente informar cidade e estado.');
+            return dados.results[0];
+        }
+
+        function localNascimentoParaUTC(dataStr, horaStr, timeZone) {
+            const [ano, mes, dia] = dataStr.split('-').map(Number);
+            const [hora, minuto] = horaStr.split(':').map(Number);
+            const baseUTC = new Date(Date.UTC(ano, mes - 1, dia, hora, minuto, 0));
+
+            const partes = new Intl.DateTimeFormat('en-US', {
+                timeZone,
+                hour12: false,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).formatToParts(baseUTC);
+
+            const valores = {};
+            partes.forEach(p => { if (p.type !== 'literal') valores[p.type] = p.value; });
+
+            let h = Number(valores.hour);
+            if (h === 24) h = 0;
+            const noFusoComoUTC = Date.UTC(
+                Number(valores.year),
+                Number(valores.month) - 1,
+                Number(valores.day),
+                h,
+                Number(valores.minute),
+                Number(valores.second)
+            );
+
+            const offsetMs = noFusoComoUTC - baseUTC.getTime();
+            return new Date(baseUTC.getTime() - offsetMs);
+        }
+
+        const SIGNOS_ZODIACAIS = [
+            ['Áries', 0], ['Touro', 30], ['Gêmeos', 60], ['Câncer', 90],
+            ['Leão', 120], ['Virgem', 150], ['Libra', 180], ['Escorpião', 210],
+            ['Sagitário', 240], ['Capricórnio', 270], ['Aquário', 300], ['Peixes', 330]
+        ];
+
+        function normalizar360(grau) {
+            return ((grau % 360) + 360) % 360;
+        }
+
+        function signoPorGrau(grau) {
+            const g = normalizar360(grau);
+            const idx = Math.floor(g / 30);
+            return {
+                nome: SIGNOS_ZODIACAIS[idx][0],
+                grau: g % 30,
+                indice: idx
+            };
+        }
+
+        function formatarGrau(grau) {
+            const g = signoPorGrau(grau);
+            return `${g.grau.toFixed(1).replace('.', ',')}° ${g.nome}`;
+        }
+
+        const PLANETAS_ASTRAL = [
+            ['Sol', 'Sun', '☉'], ['Lua', 'Moon', '☽'], ['Mercúrio', 'Mercury', '☿'],
+            ['Vênus', 'Venus', '♀'], ['Marte', 'Mars', '♂'], ['Júpiter', 'Jupiter', '♃'],
+            ['Saturno', 'Saturn', '♄'], ['Urano', 'Uranus', '♅'], ['Netuno', 'Neptune', '♆'],
+            ['Plutão', 'Pluto', '♇']
+        ];
+
+        function obterPlanetaEnum(nome, swe) {
+            const mapa = {
+                Sun: swe.Planet.Sun, Moon: swe.Planet.Moon, Mercury: swe.Planet.Mercury,
+                Venus: swe.Planet.Venus, Mars: swe.Planet.Mars, Jupiter: swe.Planet.Jupiter,
+                Saturn: swe.Planet.Saturn, Uranus: swe.Planet.Uranus, Neptune: swe.Planet.Neptune,
+                Pluto: swe.Planet.Pluto
+            };
+            return mapa[nome];
+        }
+
+        function obterPosicaoPlaneta(swe, jd, nome) {
+            const pos = swe.calculatePosition(jd, obterPlanetaEnum(nome, swe));
+            return {
+                longitude: normalizar360(Number(pos.longitude ?? pos.lon ?? pos[0] ?? 0)),
+                velocidade: Number(pos.speedLongitude ?? pos.speed ?? pos[3] ?? 0)
+            };
+        }
+
+        function distanciaAngular(a, b) {
+            const d = Math.abs(normalizar360(a) - normalizar360(b));
+            return Math.min(d, 360 - d);
+        }
+
+        function encontrarAspectos(planetas) {
+            const alvos = [
+                ['Conjunção', 0, 8], ['Sextil', 60, 6], ['Quadratura', 90, 7],
+                ['Trígono', 120, 7], ['Oposição', 180, 8]
+            ];
+            const encontrados = [];
+            for (let i = 0; i < planetas.length; i++) {
+                for (let j = i + 1; j < planetas.length; j++) {
+                    const d = distanciaAngular(planetas[i].longitude, planetas[j].longitude);
+                    let melhor = null;
+                    for (const [nome, alvo, orb] of alvos) {
+                        const erro = Math.abs(d - alvo);
+                        if (erro <= orb && (!melhor || erro < melhor.erro)) melhor = { nome, alvo, orb, erro };
+                    }
+                    if (melhor) encontrados.push({
+                        a: planetas[i].nome,
+                        b: planetas[j].nome,
+                        nome: melhor.nome,
+                        orb: melhor.erro
+                    });
+                }
+            }
+            return encontrados.slice(0, 8);
+        }
+
+        function criarRodaAstral(planetas, ascendente, mc) {
+            const tamanho = 500, centro = 250, raio = 210;
+            const cores = ['#fbbf24', '#a78bfa', '#22d3ee'];
+            let svg = `<svg viewBox="0 0 ${tamanho} ${tamanho}" class="w-full h-auto" role="img" aria-label="Roda do mapa astral">
+                <defs>
+                    <radialGradient id="astralGlow"><stop offset="0%" stop-color="#312e81" stop-opacity=".5"/><stop offset="100%" stop-color="#03020c" stop-opacity=".15"/></radialGradient>
+                </defs>
+                <circle cx="${centro}" cy="${centro}" r="${raio}" fill="url(#astralGlow)" stroke="${cores[0]}" stroke-opacity=".55" stroke-width="2"/>
+                <circle cx="${centro}" cy="${centro}" r="${raio-32}" fill="none" stroke="#a78bfa" stroke-opacity=".35"/>
+                <circle cx="${centro}" cy="${centro}" r="${raio-68}" fill="none" stroke="#22d3ee" stroke-opacity=".25"/>`;
+
+            for (let i = 0; i < 12; i++) {
+                const a = (i * 30 - 90) * Math.PI / 180;
+                const x1 = centro + (raio - 2) * Math.cos(a);
+                const y1 = centro + (raio - 2) * Math.sin(a);
+                const x2 = centro + (raio - 68) * Math.cos(a);
+                const y2 = centro + (raio - 68) * Math.sin(a);
+                svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#f59e0b" stroke-opacity=".25"/>`;
+                const tx = centro + (raio - 18) * Math.cos(a + Math.PI/12);
+                const ty = centro + (raio - 18) * Math.sin(a + Math.PI/12);
+                svg += `<text x="${tx}" y="${ty}" fill="#fbbf24" font-size="12" text-anchor="middle" dominant-baseline="middle">${['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'][i]}</text>`;
+            }
+
+            const pontos = [
+                {nome:'Asc', longitude:ascendente, cor:'#fbbf24'},
+                {nome:'MC', longitude:mc, cor:'#22d3ee'},
+                ...planetas.map(p => ({nome:p.simbolo, longitude:p.longitude, cor:'#c4b5fd'}))
+            ];
+            pontos.forEach((p, idx) => {
+                const a = (p.longitude - 90) * Math.PI / 180;
+                const r = idx < 2 ? raio - 48 : raio - 95;
+                const x = centro + r * Math.cos(a);
+                const y = centro + r * Math.sin(a);
+                svg += `<circle cx="${x}" cy="${y}" r="10" fill="#0f172a" stroke="${p.cor}" stroke-width="1.5"/>
+                        <text x="${x}" y="${y+1}" fill="${p.cor}" font-size="${idx<2?8:10}" font-weight="700" text-anchor="middle" dominant-baseline="middle">${p.nome}</text>`;
+            });
+
+            svg += `<circle cx="${centro}" cy="${centro}" r="4" fill="#fbbf24"/><text x="${centro}" y="${centro+22}" fill="#94a3b8" font-size="9" text-anchor="middle">HOLLOW</text></svg>`;
+            return svg;
+        }
+
+        function renderizarMapaAstral(resultado) {
+            document.getElementById('astral-result-title').innerText = `Mapa de ${resultado.nome}`;
+            document.getElementById('astral-result-location').innerText =
+                `${resultado.localidade} • ${resultado.data} às ${resultado.hora} • ${resultado.timezone || 'fuso local'}`;
+
+            document.getElementById('astral-wheel').innerHTML =
+                criarRodaAstral(resultado.planetas, resultado.ascendente, resultado.mc);
+
+            const destaques = [
+                ['Sol', resultado.planetas.find(p => p.nome === 'Sol'), 'Sua identidade, vitalidade e maneira de se expressar.'],
+                ['Lua', resultado.planetas.find(p => p.nome === 'Lua'), 'Seu mundo emocional, necessidades e respostas instintivas.'],
+                ['Ascendente', { signo: signoPorGrau(resultado.ascendente) }, 'A forma como você chega ao mundo e inicia experiências.']
+            ];
+
+            document.getElementById('astral-highlights').innerHTML = destaques.map(([titulo, p, descricao]) => {
+                const grau = titulo === 'Ascendente' ? resultado.ascendente : p.longitude;
+                const signo = signoPorGrau(grau);
+                return `<div class="glass-card rounded-xl p-4 border border-amber-500/20">
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">${titulo}</span>
+                        <span class="text-sm font-cinzel text-cyan-200">${signo.nome}</span>
+                    </div>
+                    <p class="text-sm text-slate-200 mt-1">${formatarGrau(grau)}</p>
+                    <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">${descricao}</p>
+                </div>`;
+            }).join('');
+
+            const aspectos = resultado.aspectos || [];
+            document.getElementById('astral-aspects').innerHTML = `
+                <div class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2">Aspectos em destaque</div>
+                <div class="flex flex-wrap gap-2">
+                    ${aspectos.length ? aspectos.map(a => `<span class="px-2.5 py-1 rounded-full bg-purple-950/70 border border-purple-500/30 text-[10px] text-purple-200">${a.a} ${a.nome.toLowerCase()} ${a.b}</span>`).join('') : '<span class="text-xs text-slate-500">Nenhum aspecto principal dentro da margem selecionada.</span>'}
+                </div>`;
+
+            const tags = [
+                `Sol em ${signoPorGrau(resultado.planetas.find(p => p.nome === 'Sol').longitude).nome}`,
+                `Lua em ${signoPorGrau(resultado.planetas.find(p => p.nome === 'Lua').longitude).nome}`,
+                `Ascendente em ${signoPorGrau(resultado.ascendente).nome}`
+            ];
+
+            mapaAstralData = resultado;
+            document.getElementById('astral-tarot-tags').innerHTML = tags.map(t =>
+                `<span class="px-2 py-1 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-[10px]">${t}</span>`
+            ).join('');
+        }
+
+        async function processarCadastroAstral(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('astral-nome').value.trim();
+            const data = document.getElementById('astral-data').value;
+            const hora = document.getElementById('astral-hora').value;
+            const cidade = document.getElementById('astral-cidade').value.trim();
+            const erro = document.getElementById('astral-erro');
+            const status = document.getElementById('astral-status');
+            const btn = document.getElementById('btn-calcular-astral');
+
+            erro.classList.add('hidden');
+            erro.innerText = '';
+
+            if (calcularIdade(data) < 18) {
+                erro.innerText = 'Acesso permitido apenas para maiores de 18 anos completos.';
+                erro.classList.remove('hidden');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            status.classList.remove('hidden');
+            status.innerText = 'Localizando sua cidade...';
+
+            try {
+                const local = await geocodificarCidade(cidade);
+                const timezone = local.timezone || 'America/Sao_Paulo';
+                status.innerText = 'Calculando as posições do seu céu...';
+
+                const swe = await carregarSwissEphemeris();
+                const utc = localNascimentoParaUTC(data, hora, timezone);
+                const jd = swe.dateToJulianDay(utc);
+
+                const casas = swe.calculateHouses(jd, Number(local.latitude), Number(local.longitude), swe.HouseSystem.Placidus);
+                const asc = normalizar360(Number(casas.ascendant ?? casas.asc ?? casas[0] ?? 0));
+                const mc = normalizar360(Number(casas.mc ?? casas.mediumCoeli ?? casas[1] ?? 0));
+
+                const planetas = PLANETAS_ASTRAL.map(([nome, chave, simbolo]) => {
+                    const pos = obterPosicaoPlaneta(swe, jd, chave);
+                    return { nome, chave, simbolo, longitude: pos.longitude, velocidade: pos.velocidade };
+                });
+
+                const resultado = {
+                    nome,
+                    data: new Date(data + 'T12:00:00').toLocaleDateString('pt-BR'),
+                    hora,
+                    localidade: `${local.name}${local.admin1 ? ' - ' + local.admin1 : ''}`,
+                    latitude: Number(local.latitude),
+                    longitude: Number(local.longitude),
+                    timezone,
+                    ascendente: asc,
+                    mc,
+                    planetas,
+                    casas,
+                    aspectos: encontrarAspectos(planetas)
+                };
+
+                const partesNome = nome.split(/\s+/).filter(Boolean);
+                usuarioData.nome = partesNome.shift() || nome;
+                usuarioData.sobrenome = partesNome.join(' ');
+                usuarioData.dataNascimento = data;
+                mapaAstralData = resultado;
+
+                renderizarMapaAstral(resultado);
+                status.classList.add('hidden');
+                mostrarEtapa('step-astral-result');
+            } catch (e) {
+                console.error(e);
+                erro.innerText = `Não foi possível calcular o mapa agora. ${e.message || 'Verifique os dados e tente novamente.'}`;
+                erro.classList.remove('hidden');
+                status.classList.add('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function iniciarTarotComMapa() {
+            leituraComMapaAstral = true;
+            if (mapaAstralData) {
+                usuarioData.dataNascimento = mapaAstralData.data;
+            }
+            esconderEtapasPrincipais();
+            const shuffle = document.getElementById('step-shuffle');
+            shuffle.classList.remove('hidden');
+            shuffle.classList.add('flex');
+
+            const nome = usuarioData.nome || 'viajante';
+            document.getElementById('saudacao-usuario').innerText = `Bem-vindo(a) ao Véu, ${nome}`;
+
+            const sol = mapaAstralData?.planetas?.find(p => p.nome === 'Sol');
+            const lua = mapaAstralData?.planetas?.find(p => p.nome === 'Lua');
+            const asc = mapaAstralData?.ascendente;
+
+            if (mapaAstralData && sol && lua && typeof asc === 'number') {
+                const texto = `Seu mapa será usado apenas como contexto simbólico: Sol em ${signoPorGrau(sol.longitude).nome}, Lua em ${signoPorGrau(lua.longitude).nome} e Ascendente em ${signoPorGrau(asc).nome}.`;
+                document.getElementById('astral-tarot-context-text').innerText = texto;
+                document.getElementById('astral-tarot-context').classList.remove('hidden');
+            }
+
+            mostrarCampoPergunta();
         }
 
         function processarCadastro(event) {
@@ -2410,6 +2963,7 @@
             usuarioData.nome = nome;
             usuarioData.sobrenome = sobrenome;
             usuarioData.dataNascimento = dataNascimentoStr;
+            leituraComMapaAstral = false;
 
             // Transição para Etapa 2
             document.getElementById('step-register').classList.add('hidden');
@@ -2771,24 +3325,24 @@
         }
 
         function reiniciarTiragem() {
-            // Volta completamente ao início do ritual, exigindo nova contribuição e novo cadastro.
-            document.getElementById('step-report').classList.add('hidden');
-            document.getElementById('step-report').classList.remove('flex');
-            document.getElementById('step-picking').classList.add('hidden');
-            document.getElementById('step-picking').classList.remove('flex');
-            document.getElementById('step-shuffle').classList.add('hidden');
-            document.getElementById('step-shuffle').classList.remove('flex');
-            document.getElementById('step-register').classList.add('hidden');
+            // Volta completamente ao início do ritual, preservando o layout original.
+            esconderEtapasPrincipais();
             document.getElementById('step-payment').classList.remove('hidden');
 
             usuarioData = { nome: '', sobrenome: '', dataNascimento: '' };
+            mapaAstralData = null;
+            leituraComMapaAstral = false;
             perguntaUsuario = '';
             cartasSelecionadas = [];
             posicaoAtualIndex = 1;
             baralhoEmbaralhado = [];
 
             document.getElementById('form-cadastro').reset();
+            document.getElementById('form-astral')?.reset();
             document.getElementById('erro-idade').classList.add('hidden');
+            document.getElementById('astral-erro')?.classList.add('hidden');
+            document.getElementById('astral-status')?.classList.add('hidden');
+            document.getElementById('astral-tarot-context')?.classList.add('hidden');
             document.getElementById('btn-embaralhar').disabled = false;
             document.getElementById('btn-embaralhar').classList.remove('opacity-50', 'cursor-not-allowed');
             document.getElementById('shuffle-status').innerText = "Aguardando início do ritual...";
