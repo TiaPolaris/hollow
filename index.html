@@ -2941,6 +2941,21 @@
             // No caminho Mapa Astral → Tarot, a pergunta deve aparecer
             // imediatamente, sem depender do atraso usado na entrada normal.
             mostrarCampoPergunta(true);
+
+            // Segunda garantia após a transição de etapa: se algum estilo
+            // residual for reaplicado pelo navegador/Tailwind, a pergunta
+            // continua visível e interativa.
+            requestAnimationFrame(() => {
+                const pergunta = document.getElementById('pergunta-container');
+                if (pergunta) {
+                    pergunta.classList.remove('hidden', 'opacity-0', 'translate-y-3', 'pointer-events-none');
+                    pergunta.classList.add('opacity-100', 'translate-y-0');
+                    pergunta.style.opacity = '1';
+                    pergunta.style.transform = 'translateY(0)';
+                    pergunta.style.pointerEvents = 'auto';
+                    pergunta.style.visibility = 'visible';
+                }
+            });
         }
 
         function processarCadastro(event) {
@@ -2992,13 +3007,19 @@
             if (!container || !campo) return;
 
             const revelar = () => {
-                // Garante que a caixa de pergunta não fique presa no estado
-                // inicial de transparência/bloqueio quando o Tarot é aberto
-                // a partir do Mapa Astral.
+                // Revelação robusta: além das classes do Tailwind, limpamos
+                // diretamente os estilos que podem ter ficado presos no estado
+                // inicial. Isso garante a abertura tanto no fluxo normal quanto
+                // em Mapa Astral -> Tarot.
                 container.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
                 container.classList.add('opacity-100', 'translate-y-0');
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+                container.style.pointerEvents = 'auto';
+                container.style.visibility = 'visible';
+                container.removeAttribute('aria-hidden');
                 atualizarPergunta();
-                campo.focus();
+                campo.focus({ preventScroll: true });
             };
 
             if (imediato) {
