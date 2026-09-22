@@ -2913,10 +2913,17 @@
             if (mapaAstralData) {
                 usuarioData.dataNascimento = mapaAstralData.data;
             }
+
             esconderEtapasPrincipais();
+
             const shuffle = document.getElementById('step-shuffle');
+            if (!shuffle) return;
+
+            // Abre explicitamente a etapa do Tarot e remove qualquer estado
+            // residual de ocultação antes de revelar a pergunta.
             shuffle.classList.remove('hidden');
             shuffle.classList.add('flex');
+            shuffle.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const nome = usuarioData.nome || 'viajante';
             document.getElementById('saudacao-usuario').innerText = `Bem-vindo(a) ao Véu, ${nome}`;
@@ -2931,7 +2938,9 @@
                 document.getElementById('astral-tarot-context').classList.remove('hidden');
             }
 
-            mostrarCampoPergunta();
+            // No caminho Mapa Astral → Tarot, a pergunta deve aparecer
+            // imediatamente, sem depender do atraso usado na entrada normal.
+            mostrarCampoPergunta(true);
         }
 
         function processarCadastro(event) {
@@ -2977,16 +2986,26 @@
         /* ==========================================================================
            LÓGICA DA ETAPA 2: EMBARALHAMENTO ANIMADO
            ========================================================================== */
-        function mostrarCampoPergunta() {
+        function mostrarCampoPergunta(imediato = false) {
             const container = document.getElementById('pergunta-container');
             const campo = document.getElementById('pergunta-leitura');
             if (!container || !campo) return;
 
-            setTimeout(() => {
+            const revelar = () => {
+                // Garante que a caixa de pergunta não fique presa no estado
+                // inicial de transparência/bloqueio quando o Tarot é aberto
+                // a partir do Mapa Astral.
                 container.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
                 container.classList.add('opacity-100', 'translate-y-0');
+                atualizarPergunta();
                 campo.focus();
-            }, 900);
+            };
+
+            if (imediato) {
+                requestAnimationFrame(revelar);
+            } else {
+                setTimeout(revelar, 900);
+            }
         }
 
         function atualizarPergunta() {
